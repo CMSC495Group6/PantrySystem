@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.myfirstapp.InventoryActivity" >
+
+    <Button 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/inventory_button_add_item" />
+    
+    <Button 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/inventory_button_add_new_item" />
+    
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" >
+        
+        <TextView 
+            android:layout_weight="4"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_list_name" />
+        
+        <TextView 
+            android:layout_weight="3"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_list_expiration_date" />
+        
+        <TextView 
+            android:layout_weight="1"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_list_quantity" />
+    </LinearLayout>
+    
+    <ListView
+        android:id="@+id/inventory_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
+</LinearLayout>

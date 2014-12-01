@@ -1,9 +1,13 @@
 package com.example.pantrysystem;
 
+import com.example.pantrysystem.InventoryActivity;
+
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -31,4 +35,10 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	/** Called when user clicks the Inventory button */
+    public void viewInventory(View view) {
+    	Intent intent = new Intent(this, InventoryActivity.class);
+    	startActivity(intent);
+    }
 }

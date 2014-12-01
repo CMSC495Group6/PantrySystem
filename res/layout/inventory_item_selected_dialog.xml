@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/inventory_item_selected_prompt"/>
+    
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        <Button android:id="@+id/inventory_item_selected_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_selected_add" />
+        
+        <Button android:id="@+id/inventory_item_selected_remove_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_selected_remove" />
+        
+        <Button android:id="@+id/inventory_item_selected_modify_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_selected_modify" />
+        
+    </LinearLayout>
+    
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        <Button android:id="@+id/inventory_item_selected_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_selected_delete" />
+        
+        <Button android:id="@+id/inventory_item_selected_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/inventory_item_selected_cancel" />
+        
+    </LinearLayout>
+
+</LinearLayout>
