@@ -19,6 +19,7 @@
     <string name="inventory_item_selected_remove">Remove</string>
     <string name="inventory_item_selected_modify">Modify</string>
     <string name="inventory_item_selected_delete">Delete</string>
-    <string name="inventory_item_selected_cancel">Cancel</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="title_activity_inventory_add_item">InventoryAddItemActivity</string>
 
 </resources>

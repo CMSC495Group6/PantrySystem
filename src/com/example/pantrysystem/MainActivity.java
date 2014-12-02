@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
 	/** Called when user clicks the Inventory button */
     public void viewInventory(View view) {
     	Intent intent = new Intent(this, InventoryActivity.class);
+    	//TODO: decide whether this activity should use FLAG_ACTIVITY_CLEAR_TOP
     	startActivity(intent);
     }
 }

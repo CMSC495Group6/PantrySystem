@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView android:id="@+id/add_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    
+    <EditText android:id="@+id/add_item_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:inputType="text" />
+    
+    <EditText android:id="@+id/add_item_expiration_date_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:inputType="date" />
+    
+    <EditText android:id="@+id/add_item_quantity_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:inputType="number" />
+    
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent" >
+        
+        <Button android:id="@+id/add_item_ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        
+        <Button android:id="@+id/add_item_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_cancel" />
+        
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,7 +1,10 @@
 package com.example.pantrysystem;
 
+import java.util.ArrayList;
+
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -14,9 +17,10 @@ import android.widget.ListView;
 
 public class InventoryActivity extends ActionBarActivity {
 	private ListView listView;
+	private ArrayList<Item> inventory;
 	private ItemAdapter adapter;
 	private Dialog dialog;
-	private InventoryAccess inventoryAccess;
+	private InventoryAccessInterface inventoryAccess;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +29,11 @@ public class InventoryActivity extends ActionBarActivity {
 		
 		// Initialize database access object.
 		inventoryAccess = new InventoryAccessTestImpl();
+		inventory = inventoryAccess.getStockedItems();
 		
 		// Set up list view element
 		listView = (ListView) findViewById(R.id.inventory_list);
-		adapter = new ItemAdapter(this, inventoryAccess.getInventory());
+		adapter = new ItemAdapter(this, inventory);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new InventoryItemClickListener());
 	}
@@ -52,6 +57,16 @@ public class InventoryActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/** Called when the user clicks the Add Item button */
+	public void addItem(View view) {
+		Intent intent = new Intent(this, InventoryAddItemActivity.class);
+		// Ensure that any of the following dialogs can't be navigated back to.
+		//TODO: decide if this is actually necessary
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
+	
+	/** Called when the user clicks on a list item */
 	class InventoryItemClickListener implements OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			// Instantiate item edit dialog
@@ -63,19 +78,19 @@ public class InventoryActivity extends ActionBarActivity {
 	
 	class ItemContextDialog extends Dialog {
 		private Item item;
-		private InventoryAccess inventoryAccess;
+//		private InventoryAccessInterface inventoryAccess;
 		private Button addButton;
 		private Button removeButton;
 		private Button modifyButton;
 		private Button deleteButton;
 		private Button cancelButton;
 		
-		public ItemContextDialog(Context context, Item item, InventoryAccess inventoryAccess) {
+		public ItemContextDialog(Context context, Item item, InventoryAccessInterface inventoryAccess) {
 			super(context);
-			this.item = item;
-			this.inventoryAccess = inventoryAccess;
-			
 			this.setContentView(R.layout.inventory_item_selected_dialog);
+			
+			this.item = item;
+//			this.inventoryAccess = inventoryAccess;
 			this.setTitle(item.getName());
 			// Set up button listeners
 			addButton = (Button) this.findViewById(R.id.inventory_item_selected_add_button);

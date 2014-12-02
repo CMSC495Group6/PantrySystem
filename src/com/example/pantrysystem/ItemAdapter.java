@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 /** List adapter for handling arrays of Item objects. */
 public class ItemAdapter extends BaseAdapter {
-	private static ArrayList<Item> items;
+	protected static ArrayList<Item> items;
 	
-	private LayoutInflater mInflater;
+	protected LayoutInflater mInflater;
 	
 	public ItemAdapter(Context context, ArrayList<Item> items) {
-		this.items = items;
+		ItemAdapter.items = items;
 		mInflater = LayoutInflater.from(context);
 	}
 	

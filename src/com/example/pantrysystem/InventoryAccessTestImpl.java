@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-public class InventoryAccessTestImpl implements InventoryAccess {
+public class InventoryAccessTestImpl implements InventoryAccessInterface {
 	ArrayList<Item> inventory;
 	
 	public InventoryAccessTestImpl() {
@@ -16,6 +16,15 @@ public class InventoryAccessTestImpl implements InventoryAccess {
 		inventory.add(new Item("Coconut", new Date(), 1));
 		inventory.add(new Item("Doritos", new Date(), 2));
 		inventory.add(new Item("Espresso", new Date(), 10));
+	}
+	
+	@Override
+	public ArrayList<Item> getItemTypes() {
+		inventory.clear();
+		inventory.add(new Item("Apple", null, 0));
+		inventory.add(new Item("Bananna", null, 0));
+		
+		return this.inventory;
 	}
 	
 	@Override
@@ -51,7 +60,7 @@ public class InventoryAccessTestImpl implements InventoryAccess {
 	}
 
 	@Override
-	public ArrayList<Item> getItemType(Item item) {
+	public ArrayList<Item> getItemsOfType(Item item) {
 		ArrayList<Item> items = new ArrayList<Item>();
 		Item tmpItem;
 		// Assemble list of all items with a date before the current date
