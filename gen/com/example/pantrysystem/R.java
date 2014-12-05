@@ -1769,8 +1769,8 @@ containing a value of this type.
         public static final int activity_inventory=0x7f030018;
         public static final int activity_inventory_add_item=0x7f030019;
         public static final int activity_main=0x7f03001a;
-        public static final int inventory_add_item_dialog=0x7f03001b;
-        public static final int inventory_item_selected_dialog=0x7f03001c;
+        public static final int dialog_inventory_add_item=0x7f03001b;
+        public static final int dialog_inventory_item_selected=0x7f03001c;
         public static final int inventory_list_row_view=0x7f03001d;
         public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }

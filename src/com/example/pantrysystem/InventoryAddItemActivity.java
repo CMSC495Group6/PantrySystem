@@ -20,7 +20,7 @@ public class InventoryAddItemActivity extends ActionBarActivity {
 	private ArrayList<Item> itemTypes;
 	private ArrayList<String> itemTypeNames;
 	private InventoryAccessInterface inventoryAccess;
-	private AddNewItemDialog dialog;
+	private AddSelectedItemDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,17 +76,17 @@ public class InventoryAddItemActivity extends ActionBarActivity {
 			// Retrieve item from item list in the same position as in the name list
 			Item item = itemTypes.get(position);
 			// Instantiate Add Item dialog
-			dialog = new AddNewItemDialog(InventoryAddItemActivity.this, item);
+			dialog = new AddSelectedItemDialog(InventoryAddItemActivity.this, item);
 			// Display dialog
 			dialog.show();
 		}
 	}
 	
 	/** Add Item Dialog class */
-	class AddNewItemDialog extends AddItemDialog {
+	class AddSelectedItemDialog extends AddItemDialog {
 		Item item;
 		/** Constructor */
-		public AddNewItemDialog(Context context, Item item) {
+		public AddSelectedItemDialog(Context context, Item item) {
 			super(context);
 			this.item = item;
 			// Set displayed text
@@ -108,13 +108,15 @@ public class InventoryAddItemActivity extends ActionBarActivity {
 			public void onClick(View view) {
 				// Construct item to be added
 				item = new Item(
-						AddNewItemDialog.this.nameInput.getText().toString(),
+						AddSelectedItemDialog.this.nameInput.getText().toString(),
 						new Date(),	//TODO: find way to get a Date object from the input field.
-						Integer.parseInt(AddNewItemDialog.this.quantityInput.getText().toString()));
+						Integer.parseInt(AddSelectedItemDialog.this.quantityInput.getText().toString()));
 				// Add item to database
 				inventoryAccess.addItem(item);
 				// Close dialog
-				AddNewItemDialog.this.dismiss();
+				AddSelectedItemDialog.this.dismiss();
+				// Return result
+				finish();
 			}
 		}
 		
@@ -123,7 +125,7 @@ public class InventoryAddItemActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View view) {
 				// Close dialog
-				AddNewItemDialog.this.dismiss();
+				AddSelectedItemDialog.this.dismiss();
 			}
 		}
 	}

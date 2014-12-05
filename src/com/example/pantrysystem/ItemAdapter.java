@@ -11,12 +11,12 @@ import android.widget.TextView;
 
 /** List adapter for handling arrays of Item objects. */
 public class ItemAdapter extends BaseAdapter {
-	protected static ArrayList<Item> items;
+	protected ArrayList<Item> items;
 	
 	protected LayoutInflater mInflater;
 	
 	public ItemAdapter(Context context, ArrayList<Item> items) {
-		ItemAdapter.items = items;
+		this.items = items;
 		mInflater = LayoutInflater.from(context);
 	}
 	
@@ -33,6 +33,12 @@ public class ItemAdapter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+	
+	/** Replaces the current list of items with a new one and triggers a redraw */
+	public void updateItems(ArrayList<Item> items) {
+		this.items = items;
+		notifyDataSetChanged();
 	}
 
 	@Override

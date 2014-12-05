@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:text="@string/inventory_button_add_new_item" />
+        android:text="@string/inventory_button_add_new_item"
+        android:onClick="addNewItem" />
     
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"

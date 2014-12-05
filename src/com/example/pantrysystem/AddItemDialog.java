@@ -17,7 +17,7 @@ public abstract class AddItemDialog extends Dialog {
 	/** Constructor */
 	public AddItemDialog(Context context) {
 		super(context);
-		this.setContentView(R.layout.inventory_add_item_dialog);
+		this.setContentView(R.layout.dialog_inventory_add_item);
 		// Bind dialog elements to object variables.
 		this.titleText = (TextView) this.findViewById(R.id.add_item_title);
 		this.nameInput = (EditText) this.findViewById(R.id.add_item_name_input);

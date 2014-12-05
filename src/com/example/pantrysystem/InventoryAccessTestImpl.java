@@ -5,31 +5,36 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class InventoryAccessTestImpl implements InventoryAccessInterface {
-	ArrayList<Item> inventory;
+	static ArrayList<Item> inventory;
 	
 	public InventoryAccessTestImpl() {
-		inventory = new ArrayList<Item>();
+		if (inventory == null) {
+			inventory = new ArrayList<Item>();
 		
-		// Generate test data.
-		inventory.add(new Item("Apple", new Date(), 6));
-		inventory.add(new Item("Bannanna", new Date(), 0));
-		inventory.add(new Item("Coconut", new Date(), 1));
-		inventory.add(new Item("Doritos", new Date(), 2));
-		inventory.add(new Item("Espresso", new Date(), 10));
+			// Generate test data.
+			inventory.add(new Item("Apple", new Date(), 6));
+			inventory.add(new Item("Bannanna", new Date(), 0));
+			inventory.add(new Item("Coconut", new Date(), 1));
+			inventory.add(new Item("Doritos", new Date(), 2));
+			inventory.add(new Item("Espresso", new Date(), 10));
+		}
 	}
 	
 	@Override
 	public ArrayList<Item> getItemTypes() {
-		inventory.clear();
-		inventory.add(new Item("Apple", null, 0));
-		inventory.add(new Item("Bananna", null, 0));
+		ArrayList<Item> types = new ArrayList<Item>();
+		Item tmpItem;
+		for (Iterator<Item> i = inventory.iterator(); i.hasNext(); ) {
+			tmpItem = i.next();
+			if (tmpItem.getQuantity() != 0) types.add(new Item(tmpItem.getName(), null, 0));
+		}
 		
-		return this.inventory;
+		return inventory;
 	}
 	
 	@Override
 	public ArrayList<Item> getInventory() {
-		return this.inventory;
+		return inventory;
 	}
 
 	@Override

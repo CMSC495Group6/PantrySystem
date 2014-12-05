@@ -1,6 +1,6 @@
 package com.example.pantrysystem;
 
-import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,8 +16,9 @@ import android.widget.Button;
 import android.widget.ListView;
 
 public class InventoryActivity extends ActionBarActivity {
+	static final int ADD_ITEM = 1;
+	
 	private ListView listView;
-	private ArrayList<Item> inventory;
 	private ItemAdapter adapter;
 	private Dialog dialog;
 	private InventoryAccessInterface inventoryAccess;
@@ -29,13 +30,23 @@ public class InventoryActivity extends ActionBarActivity {
 		
 		// Initialize database access object.
 		inventoryAccess = new InventoryAccessTestImpl();
-		inventory = inventoryAccess.getStockedItems();
 		
 		// Set up list view element
 		listView = (ListView) findViewById(R.id.inventory_list);
-		adapter = new ItemAdapter(this, inventory);
+		adapter = new ItemAdapter(this, inventoryAccess.getStockedItems());
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new InventoryItemClickListener());
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// Update list view
+		updateInventory();
+	}
+	
+	private void updateInventory() {
+		adapter.updateItems(inventoryAccess.getStockedItems());
 	}
 
 	@Override
@@ -57,6 +68,10 @@ public class InventoryActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/*-------------------------------------------------------------------------
+	 * Code for handling the Add Item button
+	 */
+	
 	/** Called when the user clicks the Add Item button */
 	public void addItem(View view) {
 		Intent intent = new Intent(this, InventoryAddItemActivity.class);
@@ -65,6 +80,75 @@ public class InventoryActivity extends ActionBarActivity {
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ADD_ITEM) {
+			if (resultCode == RESULT_OK) {
+				
+			}
+		}
+	}
+	
+	/*-------------------------------------------------------------------------
+	 * Code for handling the Add New Item button
+	 */
+	
+	/** Called when the user clicks the Add New Item button */
+	public void addNewItem(View view) {
+		// Instantiate Add New Item dialog
+		dialog = new AddNewItemDialog(InventoryActivity.this);
+		// Display dialog
+		dialog.show();
+	}
+	
+	/** Add New Item Dialog class */
+	class AddNewItemDialog extends AddItemDialog {
+		Item item;
+		/** Constructor */
+		public AddNewItemDialog(Context context) {
+			super(context);
+			// Set displayed text
+			this.setTitle("Add New Item");	//TODO: use string resource
+			this.titleText.setText("Add New Item");
+			// Set okButton's text to Add
+			this.okButton.setText("Add");	//TODO: use string resource
+			// Set Listeners
+			this.okButton.setOnClickListener(new AddButtonListener());
+			this.cancelButton.setOnClickListener(new CancelButtonListener());
+		}
+		
+		/** Add Button listener */
+		class AddButtonListener implements View.OnClickListener {
+			@Override
+			public void onClick(View view) {
+				// Construct item to be added
+				item = new Item(
+						AddNewItemDialog.this.nameInput.getText().toString(),
+						new Date(),	//TODO: find way to get a Date object from the input field.
+						Integer.parseInt(AddNewItemDialog.this.quantityInput.getText().toString()));
+				// Add item to database
+				inventoryAccess.addItem(item);
+				// Update list view
+				updateInventory();
+				// Close dialog
+				AddNewItemDialog.this.dismiss();
+			}
+		}
+		
+		/** Cancel Button listener */
+		class CancelButtonListener implements View.OnClickListener {
+			@Override
+			public void onClick(View view) {
+				// Close dialog
+				AddNewItemDialog.this.dismiss();
+			}
+		}
+	}
+	
+	/*-------------------------------------------------------------------------
+	 * Code for handling the item context menu
+	 */
 	
 	/** Called when the user clicks on a list item */
 	class InventoryItemClickListener implements OnItemClickListener {
@@ -78,7 +162,6 @@ public class InventoryActivity extends ActionBarActivity {
 	
 	class ItemContextDialog extends Dialog {
 		private Item item;
-//		private InventoryAccessInterface inventoryAccess;
 		private Button addButton;
 		private Button removeButton;
 		private Button modifyButton;
@@ -87,10 +170,9 @@ public class InventoryActivity extends ActionBarActivity {
 		
 		public ItemContextDialog(Context context, Item item, InventoryAccessInterface inventoryAccess) {
 			super(context);
-			this.setContentView(R.layout.inventory_item_selected_dialog);
+			this.setContentView(R.layout.dialog_inventory_item_selected);
 			
 			this.item = item;
-//			this.inventoryAccess = inventoryAccess;
 			this.setTitle(item.getName());
 			// Set up button listeners
 			addButton = (Button) this.findViewById(R.id.inventory_item_selected_add_button);
@@ -110,7 +192,8 @@ public class InventoryActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View view) {
 				inventoryAccess.addItem(item);
-				adapter.notifyDataSetChanged();
+				// Update list view
+				updateInventory();
 				ItemContextDialog.this.dismiss();
 			}
 		}
@@ -120,7 +203,8 @@ public class InventoryActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View view) {
 				inventoryAccess.removeItem(item);
-				adapter.notifyDataSetChanged();
+				// Update list view
+				updateInventory();
 				ItemContextDialog.this.dismiss();
 			}
 		}
@@ -130,7 +214,8 @@ public class InventoryActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View view) {
 				inventoryAccess.modifyItem(item);
-				adapter.notifyDataSetChanged();
+				// Update list view
+				updateInventory();
 				ItemContextDialog.this.dismiss();
 			}
 		}
@@ -140,7 +225,8 @@ public class InventoryActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View view) {
 				inventoryAccess.deleteItem(item);
-				adapter.notifyDataSetChanged();
+				// Update list view
+				updateInventory();
 				ItemContextDialog.this.dismiss();
 			}
 		}
