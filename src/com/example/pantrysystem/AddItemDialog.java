@@ -1,5 +1,7 @@
 package com.example.pantrysystem;
 
+import com.example.pantrysystem.R;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.widget.Button;
@@ -25,8 +27,9 @@ public abstract class AddItemDialog extends Dialog {
 		this.quantityInput = (EditText) this.findViewById(R.id.add_item_quantity_input);
 		this.okButton = (Button) this.findViewById(R.id.add_item_ok_button);
 		this.cancelButton = (Button) this.findViewById(R.id.add_item_cancel_button);
-		// Listeners should be set by subclasses.
+		// Listeners should be set by subclasses
+		setListeners();
 	}
 	
-	
+	abstract protected void setListeners();
 }

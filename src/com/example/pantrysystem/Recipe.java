@@ -18,19 +18,19 @@ public class Recipe {
 	
 	// list of items needed to make recipe
 	//TODO extend item class into a RecipeItem class?
-	private ArrayList<Item> ingredients;
+	private ArrayList<FullItem> ingredients;
 	
 	// Constructors
 	public Recipe() {
-		this.ingredients = new ArrayList<Item>();
+		this.ingredients = new ArrayList<FullItem>();
 	}	
 	
-	public Recipe(ArrayList<Item> ingredients) {
-		this.ingredients = new ArrayList<Item>(ingredients);
+	public Recipe(ArrayList<FullItem> ingredients) {
+		this.ingredients = new ArrayList<FullItem>(ingredients);
 	}
 	
 	public Recipe(Recipe r) {
-		this.ingredients = new ArrayList<Item>(r.getList());
+		this.ingredients = new ArrayList<FullItem>(r.getList());
 		this.name = r.getName();
 	}
 	
@@ -39,7 +39,7 @@ public class Recipe {
 		return this.name;
 	}
 	
-	public ArrayList<Item> getList() {
+	public ArrayList<FullItem> getList() {
 		return this.ingredients;
 	}
 	
@@ -48,7 +48,7 @@ public class Recipe {
 		this.name = s;
 	}
 	
-	public void addIngredient(Item i) {
+	public void addIngredient(FullItem i) {
 		// check if recipe already contains item
 		if (this.ingredients.contains(i))
 		{
@@ -59,8 +59,8 @@ public class Recipe {
 			this.ingredients.add(i);
 	}
 
-	public void setIngredients(ArrayList<Item> newList) {
-		this.ingredients = new ArrayList<Item>(newList);
+	public void setIngredients(ArrayList<FullItem> newList) {
+		this.ingredients = new ArrayList<FullItem>(newList);
 	}
 	
 	/* this function is used to handle unexpected events
@@ -77,7 +77,7 @@ public class Recipe {
 		return this.ingredients.size();
 	}
 	
-	private int getIngredientIndex(Item i) {
+	private int getIngredientIndex(FullItem i) {
 		int size = this.getSize();
 		
 		// loop through the ingredient list and find item with same name
@@ -93,7 +93,7 @@ public class Recipe {
 	/* updates a specified ingredient quantity to a new set amount
 	 * Does not test for valid quantity
 	 */
-	public void updateQuantity(Item i) {
+	public void updateQuantity(FullItem i) {
 		int target = this.getIngredientIndex(i);
 
 		// check if the item is found
@@ -106,7 +106,7 @@ public class Recipe {
 	/* removes a specified ingredient
 	 * 
 	 */
-	public void removeIngredient(Item i) {
+	public void removeIngredient(FullItem i) {
 		int target = this.getIngredientIndex(i);
 		
 		// check if the item is found
@@ -119,7 +119,7 @@ public class Recipe {
 	/* converts a specified ingredient into a specified one
 	 * does not modify quantity, nor does it test quantity
 	 */
-	public void changeIngredient(Item i) {
+	public void changeIngredient(FullItem i) {
 		int target = this.getIngredientIndex(i);
 		
 		// check if the item is found

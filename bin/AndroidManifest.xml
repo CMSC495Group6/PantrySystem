@@ -15,8 +15,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"
-            android:label="@string/app_name" >"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,12 +25,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InventoryActivity"
+            android:name="com.example.pantrysystem.InventoryActivity"
             android:label="@string/title_activity_inventory" >
         </activity>
         <activity
-            android:name=".InventoryAddItemActivity"
+            android:name=".ItemListActivity"
             android:label="@string/title_activity_inventory_add_item" >
+        </activity>
+        <activity
+            android:name=".RecipesActivity"
+            android:label="@string/title_activity_recipe" >
+        </activity>
+        <activity
+            android:name=".RecipesAddNewRecipeActivity"
+            android:label="@string/title_activity_recipes_add_new_recipe" >
+        </activity>
+        <activity
+            android:name="com.example.pantrysystem.AddItemActivity"
+            android:label="@string/title_activity_add_item" >
+        </activity>
+        <activity
+            android:name=".SelectItemActivity"
+            android:label="@string/title_activity_select_item" >
         </activity>
     </application>
 

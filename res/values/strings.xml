@@ -3,12 +3,14 @@
 
     <string name="app_name">My First App</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_inventory">InventoryActivity</string>
+    <string name="title_activity_inventory_add_item">InventoryAddItemActivity</string>
+    <string name="title_activity_recipe">RecipeActivity</string>
+    <string name="title_activity_recipes_add_new_recipe">RecipesAddNewRecipeActivity</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_recipes">Recipes</string>
     <string name="button_inventory">Inventory</string>
     <string name="button_expired_items">Expired Items</string>
-    <string name="button_recipes">Recipes</string>
-    <string name="title_activity_display_message">My Message</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_inventory">InventoryActivity</string>
     <string name="inventory_button_add_item">Add Item</string>
     <string name="inventory_button_add_new_item">Add New Item</string>
     <string name="inventory_list_name">Item</string>
@@ -19,7 +21,13 @@
     <string name="inventory_item_selected_remove">Remove</string>
     <string name="inventory_item_selected_modify">Modify</string>
     <string name="inventory_item_selected_delete">Delete</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="title_activity_inventory_add_item">InventoryAddItemActivity</string>
+    <string name="recipes_button_add_new_recipe">Add New Recipe</string>
+    <string name="recipes_name">Name</string>
+    <string name="recipes_ingredients">Ingredients</string>
+    <string name="recipes_inventory">Inventory</string>
+    <string name="recipes_button_add_recipe">Add Recipe</string>
+    <string name="recipes_button_add_ingredient">Add Ingredient</string>
+    <string name="title_activity_select_item">SelectItemActivity</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
 
 </resources>

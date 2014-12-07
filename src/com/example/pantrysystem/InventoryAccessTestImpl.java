@@ -4,45 +4,46 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+
 public class InventoryAccessTestImpl implements InventoryAccessInterface {
-	static ArrayList<Item> inventory;
+	static ArrayList<FullItem> inventory;
 	
 	public InventoryAccessTestImpl() {
 		if (inventory == null) {
-			inventory = new ArrayList<Item>();
+			inventory = new ArrayList<FullItem>();
 		
 			// Generate test data.
-			inventory.add(new Item("Apple", new Date(), 6));
-			inventory.add(new Item("Bannanna", new Date(), 0));
-			inventory.add(new Item("Coconut", new Date(), 1));
-			inventory.add(new Item("Doritos", new Date(), 2));
-			inventory.add(new Item("Espresso", new Date(), 10));
+			inventory.add(new FullItem("Apple", new Date(), 6));
+			inventory.add(new FullItem("Bannanna", new Date(), 0));
+			inventory.add(new FullItem("Coconut", new Date(), 1));
+			inventory.add(new FullItem("Doritos", new Date(), 2));
+			inventory.add(new FullItem("Espresso", new Date(), 10));
 		}
 	}
 	
 	@Override
-	public ArrayList<Item> getItemTypes() {
-		ArrayList<Item> types = new ArrayList<Item>();
-		Item tmpItem;
-		for (Iterator<Item> i = inventory.iterator(); i.hasNext(); ) {
+	public ArrayList<BasicItem> getItemTypes() {
+		ArrayList<BasicItem> types = new ArrayList<BasicItem>();
+		FullItem tmpItem;
+		for (Iterator<FullItem> i = inventory.iterator(); i.hasNext(); ) {
 			tmpItem = i.next();
-			if (tmpItem.getQuantity() != 0) types.add(new Item(tmpItem.getName(), null, 0));
+			types.add(new BasicItem(tmpItem.getName()));
 		}
 		
-		return inventory;
+		return types;
 	}
 	
 	@Override
-	public ArrayList<Item> getInventory() {
+	public ArrayList<FullItem> getInventory() {
 		return inventory;
 	}
 
 	@Override
-	public ArrayList<Item> getStockedItems() {
-		ArrayList<Item> stocked = new ArrayList<Item>();
-		Item tmpItem;
+	public ArrayList<FullItem> getStockedItems() {
+		ArrayList<FullItem> stocked = new ArrayList<FullItem>();
+		FullItem tmpItem;
 		// Assemble list of all items with quantity > 0
-		for (Iterator<Item> i = inventory.iterator(); i.hasNext(); ) {
+		for (Iterator<FullItem> i = inventory.iterator(); i.hasNext(); ) {
 			tmpItem = i.next();
 			if (tmpItem.getQuantity() != 0) stocked.add(tmpItem);
 		}
@@ -51,12 +52,12 @@ public class InventoryAccessTestImpl implements InventoryAccessInterface {
 	}
 
 	@Override
-	public ArrayList<Item> getExpiredItems() {
-		ArrayList<Item> expired = new ArrayList<Item>();
-		Item tmpItem;
+	public ArrayList<FullItem> getExpiredItems() {
+		ArrayList<FullItem> expired = new ArrayList<FullItem>();
+		FullItem tmpItem;
 		Date now = new Date();
 		// Assemble list of all items with a date before the current date
-		for (Iterator<Item> i = inventory.iterator(); i.hasNext(); ) {
+		for (Iterator<FullItem> i = inventory.iterator(); i.hasNext(); ) {
 			tmpItem = i.next();
 			if (tmpItem.getExpiration_date().before(now)) expired.add(tmpItem);
 		}
@@ -65,26 +66,26 @@ public class InventoryAccessTestImpl implements InventoryAccessInterface {
 	}
 
 	@Override
-	public ArrayList<Item> getItemsOfType(Item item) {
-		ArrayList<Item> items = new ArrayList<Item>();
-		Item tmpItem;
+	public ArrayList<BasicItem> getItemsOfType(BasicItem item) {
+		ArrayList<BasicItem> items = new ArrayList<BasicItem>();
+		FullItem tmpItem;
 		// Assemble list of all items with a date before the current date
-		for (Iterator<Item> i = inventory.iterator(); i.hasNext(); ) {
+		for (Iterator<FullItem> i = inventory.iterator(); i.hasNext(); ) {
 			tmpItem = i.next();
-			if (tmpItem.getName().equals(item.getName())) items.add(tmpItem);
+			if (tmpItem.getName().equals(item.getName())) items.add(new BasicItem(tmpItem.name));
 		}
 		
 		return items;
 	}
 
 	@Override
-	public void addItem(Item item) {
+	public void addItem(FullItem item) {
 		inventory.add(item);
 	}
 
 	@Override
-	public void removeItem(Item item) {
-		Item tmpItem;
+	public void removeItem(FullItem item) {
+		FullItem tmpItem;
 		int i;
 		i = inventory.indexOf(item);
 		tmpItem = inventory.get(i);
@@ -93,12 +94,12 @@ public class InventoryAccessTestImpl implements InventoryAccessInterface {
 	}
 
 	@Override
-	public void modifyItem(Item item) {
+	public void modifyItem(FullItem item) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void deleteItem(Item item) {
+	public void deleteItem(BasicItem item) {
 		// TODO Auto-generated method stub
 
 	}

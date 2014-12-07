@@ -133,10 +133,10 @@ public class RecipeHandler {
 	
 	// Menu selection for checking if inventory has ingredients
 	public void checkInventory() {
-		ArrayList<Item> tempList = new ArrayList<Item>(this.GetRecipe(promptName()).getList());
-		ArrayList<Item> missingItems = new ArrayList<Item>();
-		ArrayList<Item> expiredItems = new ArrayList<Item>();
-		ArrayList<Item> inStockItems = new ArrayList<Item>();
+		ArrayList<FullItem> tempList = new ArrayList<FullItem>(this.GetRecipe(promptName()).getList());
+		ArrayList<FullItem> missingItems = new ArrayList<FullItem>();
+		ArrayList<FullItem> expiredItems = new ArrayList<FullItem>();
+		ArrayList<FullItem> inStockItems = new ArrayList<FullItem>();
 		int size = tempList.size();
 		
 		// loop through the ingredients and place them into appropriate lists
@@ -174,7 +174,7 @@ public class RecipeHandler {
 	 * in/out of stock, or expired (in that order), with expired items
 	 * taking precedence
 	 */
-	private int queryInventory(Item item) {
+	private int queryInventory(FullItem item) {
 		int stock = 1;
 		// TODO query the inventory system for the stock of the specified item
 		
@@ -211,8 +211,8 @@ public class RecipeHandler {
 	/* obtains an ingredient in the recipe from GUI
 	 * returns item type (name and quantity)
 	 */
-	private Item promptItem() {
-		Item newItem = new Item();
+	private FullItem promptItem() {
+		FullItem newItem = new FullItem();
 		
 		//TODO possible requirement to specify if item must be existing or new?
 		

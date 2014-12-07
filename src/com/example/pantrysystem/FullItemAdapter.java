@@ -10,12 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /** List adapter for handling arrays of Item objects. */
-public class ItemAdapter extends BaseAdapter {
-	protected ArrayList<Item> items;
+public class FullItemAdapter extends BaseAdapter {
+	protected ArrayList<FullItem> items;
 	
 	protected LayoutInflater mInflater;
 	
-	public ItemAdapter(Context context, ArrayList<Item> items) {
+	public FullItemAdapter(Context context, ArrayList<FullItem> items) {
 		this.items = items;
 		mInflater = LayoutInflater.from(context);
 	}
@@ -26,7 +26,7 @@ public class ItemAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Item getItem(int position) {
+	public FullItem getItem(int position) {
 		return items.get(position);
 	}
 
@@ -36,7 +36,7 @@ public class ItemAdapter extends BaseAdapter {
 	}
 	
 	/** Replaces the current list of items with a new one and triggers a redraw */
-	public void updateItems(ArrayList<Item> items) {
+	public void updateItems(ArrayList<FullItem> items) {
 		this.items = items;
 		notifyDataSetChanged();
 	}
@@ -56,7 +56,7 @@ public class ItemAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		
-		Item item = new Item();
+		FullItem item = new FullItem();
 		item.setName(items.get(position).getName());
 		item.setExpiration_date(items.get(position).getExpiration_date());
 		item.setQuantity(items.get(position).getQuantity());

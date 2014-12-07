@@ -1,25 +1,34 @@
 package com.example.pantrysystem;
 
-
-import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends ActionBarActivity {
+public class RecipesActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_recipe);
+		
+		//TODO: Initialize database access object
+		
+		//TODO: initialize recipe list view and array adapter
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//TODO: Update recipe list view
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.recipe, menu);
 		return true;
 	}
 
@@ -35,17 +44,12 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	/** Called when user clicks the Inventory button */
-    public void viewInventory(View view) {
-    	Intent intent = new Intent(this, InventoryActivity.class);
-    	//TODO: decide whether this activity should use FLAG_ACTIVITY_CLEAR_TOP
-    	startActivity(intent);
-    }
-    
-    /** Called when user clicks the Recipes button */
-    public void viewRecipes(View view) {
-    	Intent intent = new Intent(this, RecipesActivity.class);
-    	//TODO: decide whether this activity should use FLAG_ACTIVITY_CLEAR_TOP
-    	startActivity(intent);
-    }
+	/** Called when the user clicks the Add New Recipe button */
+	public void addNewRecipe(View view) {
+		Intent intent = new Intent(this, RecipesAddNewRecipeActivity.class);
+		// Ensure that any of the following dialogs can't be navigated back to.
+		//TODO: decide if this is actually necessary
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
 }
