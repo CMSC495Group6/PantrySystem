@@ -1,18 +1,19 @@
 package com.example.pantrysystem;
 
-import com.example.pantrysystem.InventoryActivity.ItemContextDialog;
-
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class SelectItemActivity extends ItemListActivity {
-
+	static final String KEY_RETURN_NAME = "Name";
+	static final String KEY_RETURN_QUANTITY = "Quantity";
 	/** Called by supertype's initialization code */
 	@Override
 	protected void setUpListView() {
@@ -26,7 +27,7 @@ public class SelectItemActivity extends ItemListActivity {
 	/** Called when the user clicks on a list item */
 	class ItemClickListener implements OnItemClickListener {
 		String itemName;
-		int quantity;
+		int itemQuantity;
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			// Retrieve item from item list in the same position as in the name list
@@ -43,12 +44,16 @@ public class SelectItemActivity extends ItemListActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					try {
-						quantity = Integer.parseInt(input.getText().toString());
+						itemQuantity = Integer.parseInt(input.getText().toString());
 					} catch (NumberFormatException e) {
 						displayError("Please input a positive number!");	//TODO: use string resource
 					} finally {
 						dialog.dismiss();
 						//TODO: Return selected item and quantity to calling activity
+						Intent result = new Intent();
+						result.putExtra(KEY_RETURN_NAME, itemName);
+						result.putExtra(KEY_RETURN_QUANTITY, itemQuantity);
+						setResult(Activity.RESULT_OK, result);
 						finish();
 					}
 				}

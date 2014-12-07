@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ListView;
 
 public class RecipesAddNewRecipeActivity extends ActionBarActivity {
+	static final int SELECT_ITEM_REQUEST = 1;
+	
 	private ListView listView;
 	private IngredientItemAdapter adapter;
 
@@ -43,6 +45,20 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 	}
 	
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == SELECT_ITEM_REQUEST) {
+			if (resultCode == RESULT_OK) {
+				String name;
+				int quantity;
+				name = data.getStringExtra(SelectItemActivity.KEY_RETURN_NAME);
+				quantity = data.getIntExtra(SelectItemActivity.KEY_RETURN_QUANTITY, -1);
+				//TODO: add selected item to ingredients list
+				refreshIngredientsList();
+			}
+		}
+	}
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
 		// update list of selected ingredients
@@ -62,7 +78,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 		// Ensure that any of the following dialogs can't be navigated back to.
 		//TODO: decide if this is actually necessary
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);	//TODO: change call to expect a return result
+		startActivityForResult(intent, SELECT_ITEM_REQUEST);	//TODO: change call to expect a return result
 	}
 	
 	/** Called when the user clicks the Add Recipe button */
