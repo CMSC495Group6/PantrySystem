@@ -27,5 +27,7 @@ public class SelectItemActivity extends ItemListActivity {
 			
 		}
 	}
+	
+	//TODO: Return selected item and quantity to calling activity
 
 }

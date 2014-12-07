@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 	private ListView listView;
-	private FullItemAdapter adapter;	// TODO: use IngredientItemAdapter
+	private IngredientItemAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +53,16 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 		//TODO: refresh ingredients list
 	}
 	
+	//TODO: handle results from called activities
+	
 	/** Called when the user clicks the Add Ingredient button */
 	public void addIngredient(View view) {
+		// Display a list of items 
 		Intent intent = new Intent(this, SelectItemActivity.class);
 		// Ensure that any of the following dialogs can't be navigated back to.
 		//TODO: decide if this is actually necessary
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		startActivity(intent);	//TODO: change call to expect a return result
 	}
 	
 	/** Called when the user clicks the Add Recipe button */
