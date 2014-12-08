@@ -1,3 +1,27 @@
+/** SelectItemActivity class
+ * 
+ *  Class that implements the recipe system's ingredient selection menu.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Created SelectItemActivity class and outlined the required methods.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Added context menu for inputting a quantity when the user selects an
+ *  ingredient.  The result is not yet passed to the calling activity.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  The selected item and quantity are now passed to the calling activity.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import android.app.Activity;
@@ -49,7 +73,7 @@ public class SelectItemActivity extends ItemListActivity {
 						displayError("Please input a positive number!");	//TODO: use string resource
 					} finally {
 						dialog.dismiss();
-						//TODO: Return selected item and quantity to calling activity
+						// Return selected item and quantity to calling activity
 						Intent result = new Intent();
 						result.putExtra(KEY_RETURN_NAME, itemName);
 						result.putExtra(KEY_RETURN_QUANTITY, itemQuantity);

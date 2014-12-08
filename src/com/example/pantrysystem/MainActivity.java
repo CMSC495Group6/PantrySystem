@@ -1,3 +1,24 @@
+/** MainActivity class
+ * 
+ *  This class implements all of the main menu screen's actions.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/01/2014
+ *  Created MainActivity class; added Inventory, Expired Items, and Recipes
+ *  buttons; and made it so that the Inventory button call the inventory
+ *  activity.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Made the Recipes button call the recipes activity.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 

@@ -1,3 +1,31 @@
+/** InventoryActivity class
+ * 
+ *  Activity class implementing all of the inventory view's behavior.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/01/2014
+ *  Created InventoryActivity class and implemented the item context menu.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/03/2014
+ *  The Add Item button now starts the add item activity.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/05/2014
+ *  Added the Add New Item dialog.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Added dialogs for the item context menu options; some code adjustments to
+ *  reflect the changes to the Item class.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import java.util.Date;

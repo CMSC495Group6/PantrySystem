@@ -1,3 +1,29 @@
+/** AddItemActivity class
+ * 
+ *  This class implements the Add Item activity, which displays a list of all
+ *  item types.  Clicking on an item displays a dialog where the user can input
+ *  how many of the selected item to add to the inventory.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/03/2014
+ *  Created InventoryAddItemActivity class and implemented all required
+ *  functionality.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/05/2014
+ *  Renamed AddNewItemDialog variable to AddSelectedItemDialog.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Renamed to AddItemActivity.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import java.util.Date;

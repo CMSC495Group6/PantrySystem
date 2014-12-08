@@ -1,3 +1,21 @@
+/** ItemListActivity abstract class
+ * 
+ *  Template for any activity that consists of a list of items.  The item type
+ *  and on-click functionality needs to be defined by implementing the
+ *  setUpListView() abstract function.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Created ItemListActivity abstract class and implemented all required
+ *  functionality.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import java.util.ArrayList;

@@ -1,3 +1,18 @@
+/** RecipesActivity class
+ * 
+ *  Class implementing the Recipes screen's functionality.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Created RecipesActivity class and outlined all required functionality.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import android.content.Intent;

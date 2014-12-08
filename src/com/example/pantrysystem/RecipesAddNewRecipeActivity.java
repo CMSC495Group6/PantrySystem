@@ -1,3 +1,28 @@
+/** RecipesAddNewRecipeActivity class
+ * 
+ *  Class implementing the Add New Recipe screen's functionality.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Created RecipesAddNewRecipeActivity class and outlined all the required
+ *  functions.  Clicking the Add Ingredient button displays the Add Ingredient
+ *  screen.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Replaced the FullItemAdapter with a IngredientItemAdapter.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/08/2014
+ *  Activity now accepts results returned from the Add Ingredient activity.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 

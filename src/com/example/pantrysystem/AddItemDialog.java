@@ -1,3 +1,31 @@
+/** AddItemDialog abstract class
+ * 
+ *  This class acts as a template for the few similar dialogs for adding or
+ *  modifying a new or existing item.  Its on-click functionality needs to be
+ *  defined by implementing the setListeners() method.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/03/2014
+ *  Created AddItemDialog class and implemented all required functionality.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/05/2014
+ *  Some code changes to reflect the changes in some UI elements' names.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Split off the code for setting listeners in the constructor to the abstract
+ *  setListeners() method.  With this, the dialog's buttons' on-click behaviors
+ *  must be defined by the extending class, which was intended from the
+ *  beginning.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import com.example.pantrysystem.R;

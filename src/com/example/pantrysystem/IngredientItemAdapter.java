@@ -1,11 +1,20 @@
-/** List adapter for handling arrays of IngredientItem objects.
- *  Author: Julian
+/** IngredientItemAdapter class
+ * 
+ *  List adapter for handling arrays of IngredientItem objects, which contain
+ *  a name and a quantity.  Converts the IngredientItem objects in an array
+ *  into a view that can be displayed by a List View.
+ *  
  *  CMSC 495
  *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
  *  12/07/2014
- *  **********
- *  Converts the IngredientItem objects in an array into a view that can be
- *  displayed by a List View.
+ *  Created IngredientItemAdapter class and implemented all required
+ *  functionality.
+ *  - Julian
+ *  ***************************************************************************
+ *  
  */
 package com.example.pantrysystem;
 

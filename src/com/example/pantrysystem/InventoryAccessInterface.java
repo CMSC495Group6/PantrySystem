@@ -1,3 +1,27 @@
+/** InventoryAccessInterface interface
+ * 
+ *  This interface defines all the interactions the GUI can make with the
+ *  inventory database.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/01/2014
+ *  Created InventoryAccess interface and defined methods.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/03/2014
+ *  Renamed to InventoryAccessInterface.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Some code changes to reflect the changes to the Item class.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import java.util.ArrayList;

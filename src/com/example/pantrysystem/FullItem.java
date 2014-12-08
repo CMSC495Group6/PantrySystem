@@ -1,3 +1,25 @@
+/** FullItem class
+ * 
+ *  This class represents an item in the inventory, which consists of a name,
+ *  expiration date, and quantity.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/01/2014
+ *  Created Item class and implemented all required functionality.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Renamed Item to FullItem and made it extend BasicItem and implement
+ *  DatedItem, and QuantifiedItem.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
+
 package com.example.pantrysystem;
 
 import java.util.Date;

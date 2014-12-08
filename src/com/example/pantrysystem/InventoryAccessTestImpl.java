@@ -1,3 +1,35 @@
+/** InventoryAccessTestImpl class
+ * 
+ *  A quick-and-dirty implementation of the InventoryAccessInterface interface
+ *  so that the inventory GUI has some data to work with.  The storage
+ *  functions are not necessarily correct.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/01/2014
+ *  Created InventoryAccessTestImpl class and implemented most of the required
+ *  functionality.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/03/2014
+ *  Implemented getItemTypes() function.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/05/2014
+ *  Made the inventory variable static and applied the singleton pattern to it
+ *  so that the saved data is the same for all view screens; enhanced the
+ *  getItemTypes implementation.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Some code changes to reflect the changes to the Item class.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 import java.util.ArrayList;

@@ -1,12 +1,20 @@
+/** BasicItem class
+ * 
+ *  Base class for any Item type.  Only contains a name.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Created BasicItem class and implemented all required functionality.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
-/**
- * 
- * @author Julian
- * 
- * A basic item type that only holds the item's name.
- *
- */
 public class BasicItem {
 	protected String name;
 	/** Constructors */

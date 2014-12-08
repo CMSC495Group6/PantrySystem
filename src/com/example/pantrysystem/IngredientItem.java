@@ -1,3 +1,18 @@
+/** IngredientItem class
+ * 
+ *  Item type representing an item that consists of a name and quantity.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Created IngredientItem class and implemented all required functionality.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
 package com.example.pantrysystem;
 
 /**

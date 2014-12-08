@@ -1,3 +1,34 @@
+/** FullItemAdapter class
+ * 
+ *  List adapter for handling arrays of FullItem objects.  Each item's
+ *  information--its name, expiration date, and quantity--is displayed in a
+ *  single row in the list view.
+ *  
+ *  CMSC 495
+ *  Group 6
+ *  ***************************************************************************
+ *  Revision History
+ *  ---------------------------------------------------------------------------
+ *  12/01/2014
+ *  Created ItemAdapter class and implemented all required functionality.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/03/2014
+ *  Made items variable static.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/05/2014
+ *  Changed items variable back to being non-static; added updateItems()
+ *  method.
+ *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/07/2014
+ *  Renamed to FullItemAdapter to reflect the changes made to the Item class.
+ *  - Julian
+ *  ***************************************************************************
+ *  
+ */
+
 package com.example.pantrysystem;
 
 import java.util.ArrayList;
@@ -9,7 +40,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-/** List adapter for handling arrays of Item objects. */
 public class FullItemAdapter extends BaseAdapter {
 	protected ArrayList<FullItem> items;
 	
