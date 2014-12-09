@@ -20,11 +20,16 @@
  *  12/08/2014
  *  Activity now accepts results returned from the Add Ingredient activity.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/08/2014
+ *  Outlined the initialization code that distinguishes between when the user
+ *  is creating a new recipe or editing an existing one, and outlined the code
+ *  for the Add Recipe button.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
-
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
@@ -35,19 +40,34 @@ import android.view.View;
 import android.widget.ListView;
 
 public class RecipesAddNewRecipeActivity extends ActionBarActivity {
+	static final String KEY_DISPLAY_RECIPE = "KEY_DISPLAY_RECIPE";
 	static final int SELECT_ITEM_REQUEST = 1;
 	
-	private ListView listView;
+	private ListView ingredientList;
 	private IngredientItemAdapter adapter;
+	RecipeHandler recipeHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipes_add_new_recipe);
 		
-		//TODO: call startRecipe() method and assign recipe to adapter
-		
+		//TODO: If a recipe name was passed to the activity, load that recipe and
+		// display it.  Otherwise, display an empty editor for creating a new
+		// recipe.
+		String recipeName = getIntent().getStringExtra(KEY_DISPLAY_RECIPE);
+		if (recipeName.equals("")) {
+			//TODO: set up recipeHandler to create a new recipe
+		} else {
+			//TODO: set up recipeHandler to edit an existing recipe
+			//TODO: get recipe's name and display it in the name input field
+			//TODO: change Add Recipe button's text to Update Recipe
+		}
 		//TODO: set up list view to display ingredients in recipe
+		//ingredientList = (ListView) findViewById(R.id.inventory_list);
+		//adapter = new IngredientItemAdapter(this, recipeHandler.getRecipeIngredients());
+		//ingredientList.setAdapter(adapter);
+		//ingredientList.setOnItemClickListener(null);	//FIXME: implement OnItemClickListner
 	}
 
 	@Override
@@ -71,13 +91,17 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// React to input from the ingredient selector.
 		if (requestCode == SELECT_ITEM_REQUEST) {
 			if (resultCode == RESULT_OK) {
+				// If the user confirmed, add the selected ingredient with the
+				// specified quantity to the current recipe's ingredient list.
 				String name;
 				int quantity;
 				name = data.getStringExtra(SelectItemActivity.KEY_RETURN_NAME);
 				quantity = data.getIntExtra(SelectItemActivity.KEY_RETURN_QUANTITY, -1);
 				//TODO: add selected item to ingredients list
+				//recipeHandler.addItem(new IngredientItem(name, quantity));
 				refreshIngredientsList();
 			}
 		}
@@ -98,7 +122,8 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 	
 	/** Called when the user clicks the Add Ingredient button */
 	public void addIngredient(View view) {
-		// Display a list of items 
+		// When the user clicks the Add Ingredient button, display a list of
+		// items in the inventory.
 		Intent intent = new Intent(this, SelectItemActivity.class);
 		// Ensure that any of the following dialogs can't be navigated back to.
 		//TODO: decide if this is actually necessary

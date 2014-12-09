@@ -1659,14 +1659,17 @@ containing a value of this type.
         public static final int add_recipe_name_input=0x7f090041;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
+        public static final int check_recipe=0x7f090055;
         public static final int checkbox=0x7f090029;
         public static final int collapseActionView=0x7f090015;
         public static final int decor_content_parent=0x7f09002f;
         public static final int default_activity_button=0x7f090024;
+        public static final int delete_recipe=0x7f090057;
         public static final int dialog=0x7f090019;
         public static final int disableHome=0x7f09000d;
         public static final int dropdown=0x7f09001a;
         public static final int edit_query=0x7f090033;
+        public static final int edit_recipe=0x7f090056;
         public static final int end=0x7f09001c;
         public static final int expand_activities_button=0x7f090022;
         public static final int expanded_menu=0x7f090028;
@@ -1786,8 +1789,9 @@ containing a value of this type.
         public static final int inventory_add_item=0x7f0c0001;
         public static final int main=0x7f0c0002;
         public static final int recipe=0x7f0c0003;
-        public static final int recipes_add_new_recipe=0x7f0c0004;
-        public static final int select_item=0x7f0c0005;
+        public static final int recipe_context_menu=0x7f0c0004;
+        public static final int recipes_add_new_recipe=0x7f0c0005;
+        public static final int select_item=0x7f0c0006;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1848,32 +1852,35 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
         public static final int action_settings=0x7f0a0011;
         public static final int app_name=0x7f0a0010;
-        public static final int button_cancel=0x7f0a0016;
-        public static final int button_expired_items=0x7f0a0019;
-        public static final int button_inventory=0x7f0a0018;
-        public static final int button_recipes=0x7f0a0017;
-        public static final int inventory_button_add_item=0x7f0a001a;
-        public static final int inventory_button_add_new_item=0x7f0a001b;
-        public static final int inventory_item_selected_add=0x7f0a0020;
-        public static final int inventory_item_selected_delete=0x7f0a0023;
-        public static final int inventory_item_selected_modify=0x7f0a0022;
-        public static final int inventory_item_selected_prompt=0x7f0a001f;
-        public static final int inventory_item_selected_remove=0x7f0a0021;
-        public static final int inventory_list_expiration_date=0x7f0a001d;
-        public static final int inventory_list_name=0x7f0a001c;
-        public static final int inventory_list_quantity=0x7f0a001e;
-        public static final int recipes_button_add_ingredient=0x7f0a0029;
-        public static final int recipes_button_add_new_recipe=0x7f0a0024;
-        public static final int recipes_button_add_recipe=0x7f0a0028;
-        public static final int recipes_ingredients=0x7f0a0026;
-        public static final int recipes_inventory=0x7f0a0027;
-        public static final int recipes_name=0x7f0a0025;
-        public static final int title_activity_add_item=0x7f0a002b;
+        public static final int button_cancel=0x7f0a001c;
+        public static final int button_check=0x7f0a001b;
+        public static final int button_delete=0x7f0a001a;
+        public static final int button_edit=0x7f0a0019;
+        public static final int button_expired_items=0x7f0a0018;
+        public static final int button_inventory=0x7f0a0017;
+        public static final int button_recipes=0x7f0a0016;
+        public static final int inventory_button_add_item=0x7f0a001d;
+        public static final int inventory_button_add_new_item=0x7f0a001e;
+        public static final int inventory_item_selected_add=0x7f0a0023;
+        public static final int inventory_item_selected_delete=0x7f0a0026;
+        public static final int inventory_item_selected_modify=0x7f0a0025;
+        public static final int inventory_item_selected_prompt=0x7f0a0022;
+        public static final int inventory_item_selected_remove=0x7f0a0024;
+        public static final int inventory_list_expiration_date=0x7f0a0020;
+        public static final int inventory_list_name=0x7f0a001f;
+        public static final int inventory_list_quantity=0x7f0a0021;
+        public static final int recipes_button_add_ingredient=0x7f0a002c;
+        public static final int recipes_button_add_new_recipe=0x7f0a0027;
+        public static final int recipes_button_add_recipe=0x7f0a002b;
+        public static final int recipes_ingredients=0x7f0a0029;
+        public static final int recipes_inventory=0x7f0a002a;
+        public static final int recipes_name=0x7f0a0028;
+        public static final int title_activity_add_item=0x7f0a002e;
         public static final int title_activity_inventory=0x7f0a0012;
         public static final int title_activity_inventory_add_item=0x7f0a0013;
         public static final int title_activity_recipe=0x7f0a0014;
         public static final int title_activity_recipes_add_new_recipe=0x7f0a0015;
-        public static final int title_activity_select_item=0x7f0a002a;
+        public static final int title_activity_select_item=0x7f0a002d;
     }
     public static final class style {
         /** 

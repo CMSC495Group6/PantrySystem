@@ -10,6 +10,11 @@
  *  12/07/2014
  *  Created RecipesActivity class and outlined all required functionality.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/08/2014
+ *  Outlined the code for displaying the list of recipes; added the context
+ *  menu for checking, editing, or deleting a recipe, and outlined its code.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -18,11 +23,18 @@ package com.example.pantrysystem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ListView;
 
 public class RecipesActivity extends ActionBarActivity {
+	ListView recipeList;
+	RecipeHandler recipeHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +42,17 @@ public class RecipesActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_recipe);
 		
 		//TODO: Initialize database access object
+		recipeHandler = new RecipeHandler();
 		
 		//TODO: initialize recipe list view and array adapter
+		recipeList = (ListView) findViewById(R.id.recipe_list);
+		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		//		android.R.layout.simple_list_item_1, recipeHandler.getRecipeNames);
+		//recipeList.setAdapter(adapter);
+		//recipeList.setOnItemClickListener(new ItemClickListener());
+		
+		// Set up the recipe context menu
+		registerForContextMenu(recipeList);
 	}
 	
 	@Override
@@ -59,12 +80,47 @@ public class RecipesActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		// Inflate the recipe context menu.
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.recipe_context_menu, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		// Handle context menu item clicks.
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		String recipeName = (String) recipeList.getItemAtPosition(info.position);
+		switch (item.getItemId()) {
+		case R.id.check_recipe:
+			//FIXME recipeHandler.checkInventory(recipeName);
+			return true;
+		case R.id.edit_recipe:
+			// Display the Recipe Editor screen with the selected recipe
+			Intent intent = new Intent(this, RecipesAddNewRecipeActivity.class);
+			// Ensure that any of the following dialogs can't be navigated back to.
+			//TODO: decide if this is actually necessary
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra(RecipesAddNewRecipeActivity.KEY_DISPLAY_RECIPE, recipeName);
+			startActivity(intent);
+			return true;
+		case R.id.delete_recipe:
+			//FIXME recipeHandler.deleteRecipe(recipeName);
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+	
 	/** Called when the user clicks the Add New Recipe button */
 	public void addNewRecipe(View view) {
 		Intent intent = new Intent(this, RecipesAddNewRecipeActivity.class);
 		// Ensure that any of the following dialogs can't be navigated back to.
 		//TODO: decide if this is actually necessary
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra(RecipesAddNewRecipeActivity.KEY_DISPLAY_RECIPE, "");
 		startActivity(intent);
 	}
 }
