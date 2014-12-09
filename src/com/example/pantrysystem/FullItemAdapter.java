@@ -25,13 +25,22 @@
  *  12/07/2014
  *  Renamed to FullItemAdapter to reflect the changes made to the Item class.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/09/2014
+ *  Added proper date functionality using DateAssistentInterface, and added
+ *  red highlighting for expired items.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 
 package com.example.pantrysystem;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -42,12 +51,14 @@ import android.widget.TextView;
 
 public class FullItemAdapter extends BaseAdapter {
 	protected ArrayList<FullItem> items;
-	
 	protected LayoutInflater mInflater;
+	
+	private DateAssistentInterface dateAssistent;
 	
 	public FullItemAdapter(Context context, ArrayList<FullItem> items) {
 		this.items = items;
 		mInflater = LayoutInflater.from(context);
+		dateAssistent = DateAssistent.getInstance();
 	}
 	
 	@Override
@@ -92,14 +103,17 @@ public class FullItemAdapter extends BaseAdapter {
 		item.setQuantity(items.get(position).getQuantity());
 		
 		holder.name.setText(item.getName());
-		holder.expiration_date.setText(item.getExpiration_date().toString());
+		holder.expiration_date.setText(dateAssistent.formatDate(item.getExpiration_date()));
 		holder.quantity.setText(Integer.toString(item.getQuantity()));
 		
 		// Apply different colors based on item properties
 		//TODO: define colors as styles and use those
 		if (item.getQuantity() == 0) {
-			// Quantity is 0
-			convertView.setBackgroundColor(0x7F4F4F4F);
+			// Darken lines with out-of-stock items
+			convertView.setBackgroundColor(0x4F4F4F4F);
+		} else if (item.getExpiration_date().before(dateAssistent.getCurrentDate())) {
+			// Shade expired items red
+			convertView.setBackgroundColor(0x7F4F0000);
 		} else {
 			// Otherwise use default color
 			convertView.setBackgroundColor(0x00000000);
@@ -113,5 +127,4 @@ public class FullItemAdapter extends BaseAdapter {
 		TextView expiration_date;
 		TextView quantity;
 	}
-
 }

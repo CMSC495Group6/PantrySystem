@@ -27,29 +27,58 @@
  *  12/07/2014
  *  Some code changes to reflect the changes to the Item class.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/09/2014
+ *  Added proper date functionality using DateAssistentInterface.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 
 public class InventoryAccessTestImpl implements InventoryAccessInterface {
+	private static final String[] INIT_DATA = {
+		"Apple","Dec-11-2014","6",
+		"Bannanna", "Dec-29-2014", "0",
+		"Coconut", "Jan-04-2015", "1",
+		"Doritos", "Apr-12-2020", "2",
+		"Espresso", "Feb-28-2005", "10"
+	};
+	
 	static ArrayList<FullItem> inventory;
+	private DateAssistentInterface dateAssistent;
 	
 	public InventoryAccessTestImpl() {
+		dateAssistent = DateAssistent.getInstance();
 		if (inventory == null) {
 			inventory = new ArrayList<FullItem>();
 		
 			// Generate test data.
-			inventory.add(new FullItem("Apple", new Date(), 6));
-			inventory.add(new FullItem("Bannanna", new Date(), 0));
-			inventory.add(new FullItem("Coconut", new Date(), 1));
-			inventory.add(new FullItem("Doritos", new Date(), 2));
-			inventory.add(new FullItem("Espresso", new Date(), 10));
+			String name;
+			Date date;
+			int quantity;
+			for (int i = 0; i < INIT_DATA.length; i += 3) {
+				name = INIT_DATA[i];
+				try{
+					date =  dateAssistent.createDate(INIT_DATA[i+1]);
+				} catch (ParseException pe) {
+					date = new Date();
+				}
+				try {
+					quantity = Integer.parseInt(INIT_DATA[i+2]);
+				} catch (NumberFormatException nfe) {
+					quantity = 0;
+				}
+				inventory.add(new FullItem(name, date, quantity));
+			}
 		}
 	}
 	
