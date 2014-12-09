@@ -5,6 +5,16 @@
  *  **********
  *  RecipeHandler will manage the storage of recipes within
  *  the pantry system application. It contains a list of recipes
+ *  **
+ *  Revisions: 
+ *  *
+ *  12/07/2014
+ *  Converted item types from FullItem to IngredientItem, due to 
+ *  expiration date not being required within a recipes ingredient list.
+ *  Also rewrote sections to better suit the recipe system being called 
+ *  by the GUI.
+ *  @author Jesse
+ *  *
  */
 package com.example.pantrysystem;
 
@@ -52,55 +62,72 @@ public class RecipeHandler {
 		return null;
 	}
 	
-	// Menu selection for adding a recipe to the system
-	public void addRecipe () {
-		Recipe newRecipe = new Recipe();
-		newRecipe.setName(promptName());
-		
-		boolean continueAdding = true;
-		do
-		{
-			newRecipe.addIngredient(promptItem());
-			if (newRecipe.getList().size() > 0) 
-				continueAdding = promptLoop();
-		} while(continueAdding);
-			
-		//TODO Update database?
+	/* Menu selection for adding a new recipe to the system
+	 * the function requires the name of the recipe
+	 * The ingredients will be updated in another function
+	 */
+	public void createNewRecipe(String name) {
+		//create a new recipe with an empty ingredients list
+		RecipeList.add(new Recipe(name));	
 	}
 	
-	// Menu selection for modifying a recipe
-	public void modifyRecipe() {
-		// create a temporary version of the modified recipe
-		Recipe tempRecipe = new Recipe(this.GetRecipe(promptName()));
+	/* part 2 of adding a new recipe, this method updates
+	 * an existing recipe with a list of ingredients
+	 * *
+	 * @Depreciated
+	 */
+	 public void fillRecipe(String name, ArrayList<IngredientItem> items) {
+		// find the specified recipe in the recipe list
+		int index = GetRecipeIndex(name);
 		
-		boolean continueAdding = true;
-		do {
-			switch(promptModify()) {
-				case 1: 
-					tempRecipe.updateQuantity(promptItem());
-					break;
-				case 2: 
-					tempRecipe.addIngredient(promptItem());
-					break;
-				case 3:
-					tempRecipe.removeIngredient(promptItem());
-					break;
-				case 4:
-					tempRecipe.changeIngredient(promptItem());
-					break;
-				default:
-					// TODO add default interaction?
-					break;					
-			}
-			
-			// only allow saving the recipe if it meets the ingredient list requirement
-			if (tempRecipe.getList().size() > 0) 
-				continueAdding = promptLoop();
-			else {
-				// TODO prompt user to fix lack of ingredients
-			}
-				
-		} while(continueAdding);
+		// set the supplied ingredients as the ingredients for the recipe
+		this.RecipeList.get(index).setIngredients(items);
+	}
+	
+	/* alternative part 2 to adding a new recipe
+	 * adds one ingredient at a time to a recipe
+	 */
+	public void addItem(String name, IngredientItem item) {
+		// find the specified recipe in the recipe list
+		int index = GetRecipeIndex(name);
+		
+		// check if recipe was found
+		if (index >= 0)
+			// set the supplied ingredients as the ingredients for the recipe
+			this.RecipeList.get(index).addIngredient(item);	
+	}
+	
+	/* Called at the end of creating or editing a recipe
+	 * will update file of recipes and return true or false
+	 * depending on success of function
+	 */
+	public boolean finishRecipe() {
+		// TODO update recipe database/file
+		return true;
+	}
+	
+	/* Menu selection for modifying a recipe by name
+	 * Function is called specifying the recipe name, the type of
+	 * Modification requested, and the item being modified.
+	 */
+	public void modifyRecipe(String name, int type, IngredientItem item) {
+		// create a temporary version of the modified recipe
+		Recipe tempRecipe = new Recipe(this.GetRecipe(name));
+
+		switch(type) {
+			case 1: 
+				tempRecipe.updateQuantity(item);
+				break;
+			case 2: 
+				tempRecipe.addIngredient(item);
+				break;
+			case 3:
+				tempRecipe.removeIngredient(item);
+				break;
+			case 4:
+				tempRecipe.changeIngredient(item);
+				break;				
+		}
 		
 		// find and replace the list item
 		int index = this.GetRecipeIndex(tempRecipe.getName());
@@ -108,39 +135,33 @@ public class RecipeHandler {
 		// check if specified recipe was found
 		if (index >= 0)
 			this.RecipeList.set(index, tempRecipe);
-		else
-		{
-			// FIXME this shouldn't happen, since user specifies an existing recipe
-		}
-		
-		// TODO Update database?
 	}
 	
-	// Menu selection for removing a recipe
-	public void deleteRecipe() {
-		int target = this.GetRecipeIndex(promptName());
+	/* Menu selection for removing a recipe by name
+	 * 
+	 */
+	public void deleteRecipe(String name) {
+		int target = this.GetRecipeIndex(name);
 		
 		// check if specified recipe was found
 		if (target >= 0)
 			this.RecipeList.remove(target);
-		else
-		{
-			// FIXME this shouldn't happen, since user specifies an existing recipe
-		}
-		
-		//TODO Update database?
 	}
 	
-	// Menu selection for checking if inventory has ingredients
-	public void checkInventory() {
-		ArrayList<FullItem> tempList = new ArrayList<FullItem>(this.GetRecipe(promptName()).getList());
-		ArrayList<FullItem> missingItems = new ArrayList<FullItem>();
-		ArrayList<FullItem> expiredItems = new ArrayList<FullItem>();
-		ArrayList<FullItem> inStockItems = new ArrayList<FullItem>();
+	/* Menu selection for checking if inventory has ingredients
+	 * sorts ingredients into 3 distinct lists, then returns all the lists
+	 * as a multidimensional arraylist (instock, missing, expired).
+	 */
+	public ArrayList<ArrayList<IngredientItem>> checkInventory(String name) {
+		ArrayList<IngredientItem> tempList = new ArrayList<IngredientItem>(this.GetRecipe(name).getList());
+		ArrayList<IngredientItem> missingItems = new ArrayList<IngredientItem>();
+		ArrayList<IngredientItem> expiredItems = new ArrayList<IngredientItem>();
+		ArrayList<IngredientItem> inStockItems = new ArrayList<IngredientItem>();
+		ArrayList<ArrayList<IngredientItem>> allLists = new ArrayList<ArrayList<IngredientItem>>();
 		int size = tempList.size();
 		
 		// loop through the ingredients and place them into appropriate lists
-		for (int i = 0; i < size; i++) 
+		for (int i = 0; i < size; i++) { 
 			// handle queries through a hierarchy
 			switch(queryInventory(tempList.get(i)))
 			{
@@ -153,90 +174,28 @@ public class RecipeHandler {
 				case -1:
 					expiredItems.add(tempList.get(i));
 					break;
-				default:
-					//TODO add default behavior?
-					break;
 			}
+		}
 		
-		// check if any missing or expired items were found
-		if (missingItems.isEmpty() && expiredItems.isEmpty())
-		{
-			//TODO display "all ingredients found" dialog
-		}
-		else
-		{
-			//TODO send GUI list of missing items
-			//TODO send GUI list of expired items
-		}
+		// add all lists to the multidimensional arraylist
+		allLists.add(inStockItems);
+		allLists.add(missingItems);
+		allLists.add(expiredItems);
+		
+		return allLists;
 	}
 	
 	/* interacts with the inventory system to determine if items are
 	 * in/out of stock, or expired (in that order), with expired items
 	 * taking precedence
 	 */
-	private int queryInventory(FullItem item) {
+	private int queryInventory(IngredientItem item) {
 		int stock = 1;
 		// TODO query the inventory system for the stock of the specified item
 		
 		// TODO query the inventory system to see if the item is expired
 		// FIXME are expired and out of stock exclusive?
 		return stock;
-	}
-
-	/* obtains name of recipe, does not verify if name is taken
-	 * currently, only interacts with GUI
-	 */
-	private String promptName() {
-		String newName = "";
-		
-		// TODO interact with GUI to get name
-		
-		return newName;
-	}
-	
-	/* obtains type of modification the user will be performing
-	 * for the recipe
-	 */
-	private int promptModify() {
-		int type = 0;
-		// TODO interact with GUI to obtain modifcation type
-		// 1 = update quantity
-		// 2 = add new ingredient
-		// 3 = remove ingredient
-		// 4 = change ingredient
-		
-		return type;
-	}
-	
-	/* obtains an ingredient in the recipe from GUI
-	 * returns item type (name and quantity)
-	 */
-	private FullItem promptItem() {
-		FullItem newItem = new FullItem();
-		
-		//TODO possible requirement to specify if item must be existing or new?
-		
-		//TODO interact with GUI to get item name
-		newItem.setName("NO NAME");
-		
-		//TODO interact with GUI to get item quantity
-		newItem.setQuantity(1);
-		
-		return newItem;
-	}
-	
-	/* Asks user if they want to continue doing the loop,
-	 * whether it's adding, removing, or modifying
-	 * FIXME Not sure if needed
-	 */
-	private boolean promptLoop() {
-		String userInput = "N";
-		
-		//TODO interact with GUI to get loop feedback
-		if (userInput.equalsIgnoreCase("N"))
-			return false;
-		else
-			return true;
 	}
 
 }
