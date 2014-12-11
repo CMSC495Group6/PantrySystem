@@ -28,19 +28,27 @@
  *  Re-did the item list context menu to use an actual context menu, and
  *  replaced some string literals with references to string resources.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Added Date Picker functionality to the Add New Item and Edit Item dialogs.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
 
 import java.text.ParseException;
+import java.util.Calendar;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -49,6 +57,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -57,7 +66,7 @@ public class InventoryActivity extends ActionBarActivity {
 	
 	private ListView listView;
 	private FullItemAdapter adapter;
-	private Dialog dialog;
+	private AddItemDialog dialog;
 	private InventoryAccessInterface inventoryAccess;
 	private FullItem selectedItem;
 	private DateAssistentInterface dateAssistent;
@@ -124,18 +133,21 @@ public class InventoryActivity extends ActionBarActivity {
 		selectedItem = (FullItem) listView.getItemAtPosition(info.position);
 		switch (item.getItemId()) {
 		case R.id.add_item:
+			// Open the Add Item dialog
 			showAddItemDialog(selectedItem.name);
 			return true;
 		case R.id.remove_item:
+			// Open the Remove Item Dialog
 			showRemoveItemDialog(selectedItem.name);
 			return true;
 		case R.id.edit_item:
 			// Open Edit Item dialog
-			EditItemDialog dialog = new EditItemDialog(InventoryActivity.this);
+			dialog = new EditItemDialog(InventoryActivity.this);
 			dialog.show();
 			return true;
 		case R.id.delete_item:
-			//TODO delete item from inventory
+			//TODO: Open an alert asking for confirmation.
+			deleteSelectedItem();
 			return true;
 		default:
 			return super.onContextItemSelected(item);
@@ -221,9 +233,16 @@ public class InventoryActivity extends ActionBarActivity {
 		/** Called by supertype's constructor */
 		@Override
 		protected void setListeners() {
-			this.dateInputButton.setOnClickListener(null);
+			this.dateInputButton.setOnClickListener(new SetDateButtonListener());
 			this.okButton.setOnClickListener(new EditButtonListener());
 			this.cancelButton.setOnClickListener(new CancelButtonListener());
+		}
+		/** Listener for the Edit dialog's Set Date button. */
+		class SetDateListener implements View.OnClickListener {
+			@Override
+			public void onClick(View view) {
+				
+			}
 		}
 		/** Listener for the Edit dialog's confirmation button. */
 		class EditButtonListener implements View.OnClickListener {
@@ -299,6 +318,7 @@ public class InventoryActivity extends ActionBarActivity {
 		/** Called by supertype's constructor */
 		@Override
 		protected void setListeners() {
+			this.dateInputButton.setOnClickListener(new SetDateButtonListener());
 			this.okButton.setOnClickListener(new AddButtonListener());
 			this.cancelButton.setOnClickListener(new CancelButtonListener());
 		}
@@ -334,6 +354,39 @@ public class InventoryActivity extends ActionBarActivity {
 		}
 	}
 	/*-------------------------------------------------------------------------
+	 * Date Picker used by the Add New Item and Edit Item dialogs.
+	 */
+	/** Listener for the Set Date button. */
+	class SetDateButtonListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			DialogFragment newFragment = new DatePickerFragment();
+		    newFragment.show(getSupportFragmentManager(), "datePicker");
+		}
+	}
+	class DatePickerFragment extends DialogFragment implements
+		OnDateSetListener {
+	
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+		    // Use the current date as the default date in the picker
+		    final Calendar c = Calendar.getInstance();
+		    int year = c.get(Calendar.YEAR);
+		    int month = c.get(Calendar.MONTH);
+		    int day = c.get(Calendar.DAY_OF_MONTH);
+		
+		    // Create a new instance of DatePickerDialog and return it
+		    return new DatePickerDialog(getActivity(), this, year, month, day);
+		}
+		
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			dialog.setExpirationDateText(dateAssistent.createDateString(year, monthOfYear, dayOfMonth));
+		}
+	
+	}
+	/*-------------------------------------------------------------------------
 	 * Utility functions
 	 */
 	/** Add a new item to the inventory. */
@@ -365,7 +418,7 @@ public class InventoryActivity extends ActionBarActivity {
 	}
 	/** Displays an alert with an error message. */
 	private void displayError(int messageId) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(InventoryActivity.this);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(messageId)
 		       .setCancelable(false)
 		       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {

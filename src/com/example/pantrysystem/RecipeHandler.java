@@ -30,6 +30,10 @@
  *  Also added constants for those values.
  *  @author Jesse
  *  *
+ *  12/11/2014
+ *  Replaced references to Item class with FullItem class.
+ *  @author Julian
+ *  *
  */
 package com.example.pantrysystem;
 
@@ -299,7 +303,7 @@ public class RecipeHandler {
 		int stock = 0;
 		// query the inventory system for the stock of the specified item
 		// TODO InventoryAccessInterface.getStockedItems()
-		ArrayList<Item> currentStock = new ArrayList<Item>();
+		ArrayList<FullItem> currentStock = new ArrayList<FullItem>();
 		
 		// loop through supplied inventory to try to find an instance of the item
 		for (int i = 0; i < currentStock.size(); i++) {
@@ -317,7 +321,7 @@ public class RecipeHandler {
 		
 		// query the inventory system to see if the item is expired
 		// TODO InventoryAccessInterface.getExpiredItems()
-		ArrayList<Item> expiredStock = new ArrayList<Item>();
+		ArrayList<FullItem> expiredStock = new ArrayList<FullItem>();
 		
 		// loop through supplied inventory to try to find an instance of the item
 		for (int i = 0; i < expiredStock.size(); i++) {

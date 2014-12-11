@@ -13,11 +13,17 @@
  *  12/09/2014
  *  Created DateAssistent class and implement all required methods.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Added a function for converting a combination of year, month and day into
+ *  a correctly formatted string representation of the date.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
 
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +31,7 @@ import java.util.Locale;
 
 public class DateAssistent implements DateAssistentInterface {
 	private static final String DATE_FORMAT = "MMM-dd-yyyy";
+	
 	private static DateAssistent instance;
 	static SimpleDateFormat dateFormatter;
 	private static Date now;
@@ -61,6 +68,17 @@ public class DateAssistent implements DateAssistentInterface {
 	@Override
 	public String formatDate(Date date) {
 		return dateFormatter.format(date);
+	}
+	/** Returns a correctly formatted date string. */
+	public String createDateString(int year, int month, int day) {
+		StringBuilder formattedDate;
+		formattedDate = new StringBuilder();
+		formattedDate.append(new DateFormatSymbols().getShortMonths()[month]);
+		formattedDate.append("-");
+		formattedDate.append(String.format(Locale.US, "%02d", day));
+		formattedDate.append("-");
+		formattedDate.append(year);
+		return formattedDate.toString();
 	}
 	/** Recalculate the current date and replace it if the date changed. */
 	@Override

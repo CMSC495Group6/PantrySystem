@@ -17,9 +17,15 @@
  *  12/10/2014
  *  Added header comment and revision history. 
  *  @author Jesse
+ *  *
+ *  12/11/2014
+ *  Added missing include for BaseColumns
+ *  @author Julian
  */
 
 package com.example.pantrysystem;
+
+import android.provider.BaseColumns;
 
 public final class RecipeReaderContract {
 	public static final int DATABASE_VERSION = 1;

@@ -10,12 +10,12 @@
     
     <string name="button_recipes">Recipes</string>
     <string name="button_inventory">Inventory</string>
-    <string name="button_expired_items">Expired Items</string><string name="button_add">Add</string><string name="button_remove">Remove</string><string name="button_edit">Edit</string><string name="button_delete">Delete</string><string name="button_input_date">Input Date</string><string name="button_check">Check</string><string name="button_ok">OK</string><string name="button_cancel">Cancel</string><string name="error_positive_number">Please input a positive number.</string>
+    <string name="button_expired_items">Expired Items</string><string name="button_add">Add</string><string name="button_remove">Remove</string><string name="button_edit">Edit</string><string name="button_delete">Delete</string><string name="button_input_date">Set Date</string><string name="button_check">Check</string><string name="button_ok">OK</string><string name="button_cancel">Cancel</string><string name="error_positive_number">Please input a positive number.</string>
     <string name="error_date_format">The expiration date isn\'t formatted correctly.\n\nThis shouldn\'t happen.</string><string name="inventory_button_add_item">Add Item</string>
     <string name="inventory_button_add_new_item">Add New Item</string>
     <string name="inventory_list_name">Item</string>
     <string name="inventory_list_expiration_date">Expiration Date</string>
-    <string name="inventory_list_quantity">Quantity</string>
+    <string name="inventory_list_quantity">Qty.</string>
     <string name="inventory_item_selected_prompt">Do what with this item?</string>
     <string name="inventory_item_selected_add">Add</string>
     <string name="inventory_item_selected_remove">Remove</string>

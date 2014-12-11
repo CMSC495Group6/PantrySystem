@@ -25,19 +25,32 @@
  *  12/10/2014
  *  Replaced some string literals with references to string resources.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Added Date Picker functionality to the Add Item dialog.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
 
-import java.util.Date;
+import java.text.ParseException;
+import java.util.Calendar;
 
 import com.example.pantrysystem.R;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -84,7 +97,7 @@ public class AddItemActivity extends ItemListActivity {
 		
 		/** Called by supertype's constructor */
 		protected void setListeners() {
-			this.dateInputButton.setOnClickListener(null);
+			this.dateInputButton.setOnClickListener(new SetDateButtonListener());
 			this.okButton.setOnClickListener(new AddButtonListener());
 			this.cancelButton.setOnClickListener(new CancelButtonListener());
 		}
@@ -95,16 +108,25 @@ public class AddItemActivity extends ItemListActivity {
 			public void onClick(View view) {
 				// Construct item to be added
 				FullItem newItem;
-				newItem = new FullItem(
-						AddSelectedItemDialog.this.nameInput.getText().toString(),
-						new Date(),	//TODO: find way to get a Date object from the input field.
-						Integer.parseInt(AddSelectedItemDialog.this.quantityInput.getText().toString()));
-				// Add item to database
-				inventoryAccess.addItem(newItem);
-				// Close dialog
-				AddSelectedItemDialog.this.dismiss();
-				// Return result
-				finish();
+				newItem = new FullItem();
+				try {
+					newItem.setName(
+							AddSelectedItemDialog.this.nameInput.getText().toString());
+					newItem.setExpiration_date(DateAssistent.getInstance().createDate(
+							AddSelectedItemDialog.this.expirationDateText.getText().toString()));
+					newItem.setQuantity(
+							Integer.parseInt(AddSelectedItemDialog.this.quantityInput.getText().toString()));
+					// Add item to database
+					inventoryAccess.addItem(newItem);
+					// Close dialog
+					AddSelectedItemDialog.this.dismiss();
+					// Return result
+					finish();
+				} catch (NumberFormatException e) {
+					displayError(R.string.error_positive_number);
+				} catch (ParseException e) {
+					displayError(R.string.error_date_format);
+				}
 			}
 		}
 		
@@ -116,5 +138,55 @@ public class AddItemActivity extends ItemListActivity {
 				AddSelectedItemDialog.this.dismiss();
 			}
 		}
+	}
+	/*-------------------------------------------------------------------------
+	 * Date Picker used by the Add New Item and Edit Item dialogs.
+	 */
+	/** Listener for the Set Date button. */
+	class SetDateButtonListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			DialogFragment newFragment = new DatePickerFragment();
+		    newFragment.show(getSupportFragmentManager(), "datePicker");
+		}
+	}
+	class DatePickerFragment extends DialogFragment implements
+		OnDateSetListener {
+	
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+		    // Use the current date as the default date in the picker
+		    final Calendar c = Calendar.getInstance();
+		    int year = c.get(Calendar.YEAR);
+		    int month = c.get(Calendar.MONTH);
+		    int day = c.get(Calendar.DAY_OF_MONTH);
+		
+		    // Create a new instance of DatePickerDialog and return it
+		    return new DatePickerDialog(getActivity(), this, year, month, day);
+		}
+		
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			dialog.setExpirationDateText(
+					DateAssistent.getInstance().createDateString(year, monthOfYear, dayOfMonth));
+		}
+	
+	}
+	/*-------------------------------------------------------------------------
+	 * Utility functions
+	 */
+	/** Displays an alert with an error message. */
+	private void displayError(int messageId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(messageId)
+		       .setCancelable(false)
+		       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.dismiss();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 }

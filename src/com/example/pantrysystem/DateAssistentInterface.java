@@ -12,6 +12,11 @@
  *  12/09/2014
  *  Created DateAssistentInterface interface and defined all required methods.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Added a function for converting a combination of year, month and day into
+ *  a correctly formatted string representation of the date.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -29,6 +34,8 @@ public interface DateAssistentInterface {
 	public Date createDate(String dateString) throws ParseException;
 	/** Returns a formatted string representation of the provided date. */
 	public String formatDate(Date date);
+	/** Returns a correctly formatted date string. */
+	public String createDateString(int year, int month, int day);
 	/** Recalculate the current date and replace it if the date changed. */
 	public void updateCurrentDate();
 }

@@ -29,6 +29,10 @@
  *  displaying the expiration date, and dateInputButton for opening the date
  *  picker.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Added a function for setting the expiration date text.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -47,7 +51,6 @@ public abstract class AddItemDialog extends Dialog {
 	protected EditText quantityInput;
 	protected Button okButton;
 	protected Button cancelButton;
-	
 	/** Constructor */
 	public AddItemDialog(Context context) {
 		super(context);
@@ -62,6 +65,10 @@ public abstract class AddItemDialog extends Dialog {
 		// Listeners should be set by subclasses
 		setListeners();
 	}
-	
+	/** Sets the three button's listeners. */
 	abstract protected void setListeners();
+	/** Setters */
+	public void setExpirationDateText(String expirationDateText) {
+		this.expirationDateText.setText(expirationDateText);
+	}
 }
