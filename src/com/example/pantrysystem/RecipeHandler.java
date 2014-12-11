@@ -22,6 +22,14 @@
  *  calling them with reference to currentRecipe instead of a recipe
  *  name
  *  @author Jesse
+ *  *
+ *  12/10/2014
+ *  Modified query inventory function so that all it needs is to call
+ *  the getStockedItems and getExpiredItems functions in order
+ *  to check if an item is in stock, expired, or out of stock.
+ *  Also added constants for those values.
+ *  @author Jesse
+ *  *
  */
 package com.example.pantrysystem;
 
@@ -31,6 +39,7 @@ public class RecipeHandler {
 	// List of all recipes in application
 	private ArrayList<Recipe> RecipeList;
 	private Recipe currentRecipe;
+	private final int IN_STOCK = 1, OUT_OF_STOCK = 0, EXPIRED = -1;
 	
 	// Constructor
 	public RecipeHandler() {
@@ -224,13 +233,13 @@ public class RecipeHandler {
 			// handle queries through a hierarchy
 			switch(queryInventory(tempList.get(i)))
 			{
-				case 1:
+				case IN_STOCK:
 					inStockItems.add(tempList.get(i));
 					break;
-				case 0:
+				case OUT_OF_STOCK:
 					missingItems.add(tempList.get(i));
 					break;
-				case -1:
+				case EXPIRED:
 					expiredItems.add(tempList.get(i));
 					break;
 			}
@@ -288,10 +297,37 @@ public class RecipeHandler {
 	 */
 	private int queryInventory(IngredientItem item) {
 		int stock = 0;
-		// TODO query the inventory system for the stock of the specified item
+		// query the inventory system for the stock of the specified item
+		// TODO InventoryAccessInterface.getStockedItems()
+		ArrayList<Item> currentStock = new ArrayList<Item>();
 		
-		// TODO query the inventory system to see if the item is expired
-		// FIXME are expired and out of stock exclusive?
-		return stock;
+		// loop through supplied inventory to try to find an instance of the item
+		for (int i = 0; i < currentStock.size(); i++) {
+			// check if names match
+			if (currentStock.get(i).getName().equalsIgnoreCase(item.getName()))
+			{
+				// add the quantity to the stock
+				stock += currentStock.get(i).getQuantity();
+				
+				// check if we have sufficient quantity
+				if (stock >= item.getQuantity())
+					return IN_STOCK;
+			}
+		}
+		
+		// query the inventory system to see if the item is expired
+		// TODO InventoryAccessInterface.getExpiredItems()
+		ArrayList<Item> expiredStock = new ArrayList<Item>();
+		
+		// loop through supplied inventory to try to find an instance of the item
+		for (int i = 0; i < expiredStock.size(); i++) {
+			// check if names match
+			if (expiredStock.get(i).getName().equalsIgnoreCase(item.getName()))
+				return EXPIRED;
+		}
+
+		// if not in stock, and not expired then the item must be out of stock
+		return OUT_OF_STOCK;
 	}
+
 }
