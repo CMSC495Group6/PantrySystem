@@ -1,3 +1,24 @@
+/** Recipe Class for Pantry System android application
+ *  CMSC 495
+ *  Group 6
+ *  12/09/2014
+ *  **********
+ *  Database related class for storing the recipes. Defines the tables
+ *  to be used within the Contract class, and the inside classes are the
+ *  actual tables.
+ *  *
+ *  Structure is: [Recipe] <--> [List] <--> [Ingredients]
+ *  Recipe: RecipeKey, RecipeName
+ *  List: RecipeKey, IngredientKey, Quantity
+ *  Ingredients: IngredientKey, IngredientName
+ *  **
+ *  Revisions: 
+ *  *
+ *  12/10/2014
+ *  Added header comment and revision history. 
+ *  @author Jesse
+ */
+
 package com.example.pantrysystem;
 
 public final class RecipeReaderContract {
