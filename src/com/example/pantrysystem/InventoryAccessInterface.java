@@ -19,6 +19,10 @@
  *  12/07/2014
  *  Some code changes to reflect the changes to the Item class.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Changed the modifyItem() method to also require the original item as input.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -47,7 +51,7 @@ public interface InventoryAccessInterface {
 	public void removeItem(FullItem item);
 	/** Modify an item's information. */
 	//TODO: throw exception when supplied item is not present in inventory?
-	public void modifyItem(FullItem item);
+	public void modifyItem(FullItem originalItem, FullItem editedItem);
 	/** Delete item from inventory. */
 	//TODO: throw exception when items of this type with a quantity > 0 are in the inventory?
 	public void deleteItem(BasicItem item);

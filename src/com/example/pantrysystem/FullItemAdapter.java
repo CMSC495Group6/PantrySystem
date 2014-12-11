@@ -30,17 +30,17 @@
  *  Added proper date functionality using DateAssistentInterface, and added
  *  red highlighting for expired items.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Fixed generated list rows not inheriting the parent list's attributes.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 
 package com.example.pantrysystem;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -86,7 +86,7 @@ public class FullItemAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.inventory_list_row_view, null);
+			convertView = mInflater.inflate(R.layout.inventory_list_row_view, parent, false);
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView.findViewById(R.id.item_name);
 			holder.expiration_date = (TextView) convertView.findViewById(R.id.item_expiration_date);

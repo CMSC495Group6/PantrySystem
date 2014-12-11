@@ -23,12 +23,17 @@
  *  Added dialogs for the item context menu options; some code adjustments to
  *  reflect the changes to the Item class.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Re-did the item list context menu to use an actual context menu, and
+ *  replaced some string literals with references to string resources.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
 
-import java.util.Date;
+import java.text.ParseException;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,12 +42,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -53,20 +59,24 @@ public class InventoryActivity extends ActionBarActivity {
 	private FullItemAdapter adapter;
 	private Dialog dialog;
 	private InventoryAccessInterface inventoryAccess;
+	private FullItem selectedItem;
+	private DateAssistentInterface dateAssistent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inventory);
-		
 		// Initialize database access object.
 		inventoryAccess = new InventoryAccessTestImpl();
-		
 		// Set up list view element
 		listView = (ListView) findViewById(R.id.inventory_list);
 		adapter = new FullItemAdapter(this, inventoryAccess.getInventory());
 		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new InventoryItemClickListener());
+		//listView.setOnItemClickListener(new InventoryItemClickListener());
+		registerForContextMenu(listView);
+		// Initialize other variables
+		selectedItem = null;
+		dateAssistent = DateAssistent.getInstance();
 	}
 	
 	@Override
@@ -99,10 +109,158 @@ public class InventoryActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		// Inflate the recipe context menu.
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.inventory_context_menu, menu);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		// Handle context menu item clicks.
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		selectedItem = (FullItem) listView.getItemAtPosition(info.position);
+		switch (item.getItemId()) {
+		case R.id.add_item:
+			showAddItemDialog(selectedItem.name);
+			return true;
+		case R.id.remove_item:
+			showRemoveItemDialog(selectedItem.name);
+			return true;
+		case R.id.edit_item:
+			// Open Edit Item dialog
+			EditItemDialog dialog = new EditItemDialog(InventoryActivity.this);
+			dialog.show();
+			return true;
+		case R.id.delete_item:
+			//TODO delete item from inventory
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+	/** Displays the Add Item dialog. */
+	private void showAddItemDialog(String title) {
+		// Create the input dialog
+		final EditText input = new EditText(InventoryActivity.this);
+		AlertDialog.Builder alert = new AlertDialog.Builder(InventoryActivity.this);
+		alert.setTitle(title);
+		alert.setMessage("Add how many?");	//TODO: use string resource
+		alert.setView(input);
+		// Behavior for confirmation button
+		alert.setPositiveButton(R.string.button_add, new DialogInterface.OnClickListener() {
+			/** Listener for the "Add" button */
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				int quantity;
+				try {
+					quantity = Integer.parseInt(input.getText().toString());
+					addToSelectedItem(quantity);
+					dialog.dismiss();
+				} catch (NumberFormatException e) {
+					displayError(R.string.error_positive_number);
+				}
+			}
+		});
+		// Behavior for "Cancel" button
+		alert.setNegativeButton(R.string.button_cancel, new CancelButtonListener());
+		alert.show();
+	}
+	/** Displays the Remove Item dialog. */
+	private void showRemoveItemDialog(String title) {
+		// Create the input dialog
+		final EditText input = new EditText(InventoryActivity.this);
+		AlertDialog.Builder alert = new AlertDialog.Builder(InventoryActivity.this);
+		alert.setTitle(title);
+		alert.setMessage("Remove how many?");	//TODO: use string resource
+		alert.setView(input);
+		// Behavior for confirmation button
+		alert.setPositiveButton(R.string.button_remove, new DialogInterface.OnClickListener() {
+			/** Listener for the "Add" button */
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				int quantity;
+				try {
+					quantity = Integer.parseInt(input.getText().toString());
+					removeFromSelectedItem(quantity);
+					dialog.dismiss();
+				} catch (NumberFormatException e) {
+					displayError(R.string.error_positive_number);
+				}
+			}
+		});
+		// Behavior for "Cancel" button
+		alert.setNegativeButton(R.string.button_cancel, new CancelButtonListener());
+		alert.show();
+	}
+	/** Listener for the Add and Remove Item dialogs' Cancel buttons. */
+	class CancelButtonListener implements DialogInterface.OnClickListener {
+		/** Listener for the "Cancel" button */
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			dialog.dismiss();
+		}
+	}
+	/** Dialog for editing the selected item. */
+	class EditItemDialog extends AddItemDialog {
+		/** Constructor */
+		public EditItemDialog(Context context) {
+			super(context);
+			this.setTitle(selectedItem.getName());
+			this.okButton.setText(R.string.button_edit);
+			this.nameInput.setText(selectedItem.getName());
+			this.nameInput.setEnabled(false);
+			this.expirationDateText.setText(
+					dateAssistent.formatDate(
+							selectedItem.getExpiration_date()));
+			this.quantityInput.setText(Integer.toString(
+					selectedItem.getQuantity()));
+		}
+		/** Called by supertype's constructor */
+		@Override
+		protected void setListeners() {
+			this.dateInputButton.setOnClickListener(null);
+			this.okButton.setOnClickListener(new EditButtonListener());
+			this.cancelButton.setOnClickListener(new CancelButtonListener());
+		}
+		/** Listener for the Edit dialog's confirmation button. */
+		class EditButtonListener implements View.OnClickListener {
+			@Override
+			public void onClick(View view) {
+				FullItem editedItem;
+				editedItem = new FullItem();
+				try {
+					// Construct item to be added
+					editedItem.setName(
+							EditItemDialog.this.nameInput.getText().toString());
+					editedItem.setExpiration_date(dateAssistent.createDate(
+							EditItemDialog.this.expirationDateText.getText().toString()));
+					editedItem.setQuantity(Integer.parseInt(
+							EditItemDialog.this.quantityInput.getText().toString()));
+					modifySelectedItem(editedItem);
+					// Close dialog
+					EditItemDialog.this.dismiss();
+				} catch (ParseException pe) {
+					displayError(R.string.error_date_format);
+				} catch (NumberFormatException nfe) {
+					displayError(R.string.error_positive_number);
+				}
+			}
+		}
+		/** Cancel Button listener */
+		class CancelButtonListener implements View.OnClickListener {
+			@Override
+			public void onClick(View view) {
+				// Close dialog
+				EditItemDialog.this.dismiss();
+			}
+		}
+	}
 	/*-------------------------------------------------------------------------
 	 * Code for handling the Add Item button
 	 */
-	
 	/** Called when the user clicks the Add Item button */
 	public void addItem(View view) {
 		Intent intent = new Intent(this, AddItemActivity.class);
@@ -111,7 +269,6 @@ public class InventoryActivity extends ActionBarActivity {
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}
-	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == ADD_ITEM) {
@@ -120,11 +277,9 @@ public class InventoryActivity extends ActionBarActivity {
 			}
 		}
 	}
-	
 	/*-------------------------------------------------------------------------
 	 * Code for handling the Add New Item button
 	 */
-	
 	/** Called when the user clicks the Add New Item button */
 	public void addNewItem(View view) {
 		// Instantiate Add New Item dialog
@@ -132,45 +287,43 @@ public class InventoryActivity extends ActionBarActivity {
 		// Display dialog
 		dialog.show();
 	}
-	
 	/** Add New Item Dialog class */
 	class AddNewItemDialog extends AddItemDialog {
-		FullItem item;
 		/** Constructor */
 		public AddNewItemDialog(Context context) {
 			super(context);
 			// Set dynamic text
-			this.setTitle("Add New Item");	//TODO: use string resource
-			this.titleText.setText("Add New Item");	//TODO: remove this text element?
-			this.okButton.setText("Add");	//TODO: use string resource
+			this.setTitle(R.string.inventory_button_add_new_item);
+			this.okButton.setText(R.string.button_add);
 		}
-		
 		/** Called by supertype's constructor */
 		@Override
 		protected void setListeners() {
 			this.okButton.setOnClickListener(new AddButtonListener());
 			this.cancelButton.setOnClickListener(new CancelButtonListener());
 		}
-		
 		/** Add Button listener */
 		class AddButtonListener implements View.OnClickListener {
 			@Override
 			public void onClick(View view) {
-				// Construct item to be added
-				item = new FullItem(
-						AddNewItemDialog.this.nameInput.getText().toString(),
-						new Date(),	//FIXME: find way to get a Date object from the input field.
-						Integer.parseInt(AddNewItemDialog.this.quantityInput.getText().toString())
-						);
-				// Add item to database
-				inventoryAccess.addItem(item);
-				// Update list view
-				updateInventory();
-				// Close dialog
-				AddNewItemDialog.this.dismiss();
+				FullItem newItem;
+				try {
+					// Construct item to be added
+					newItem = new FullItem();
+					newItem.setName(AddNewItemDialog.this.nameInput.getText().toString());
+					newItem.setExpiration_date(dateAssistent.createDate(
+							AddNewItemDialog.this.expirationDateText.getText().toString()));
+					newItem.setQuantity(
+							Integer.parseInt(AddNewItemDialog.this.quantityInput.getText().toString()));
+					addNewItem(newItem);
+					AddNewItemDialog.this.dismiss();
+				} catch (NumberFormatException e) {
+					displayError(R.string.error_positive_number);
+				} catch (ParseException e) {
+					displayError(R.string.error_date_format);
+				}
 			}
 		}
-		
 		/** Cancel Button listener */
 		class CancelButtonListener implements View.OnClickListener {
 			@Override
@@ -180,241 +333,47 @@ public class InventoryActivity extends ActionBarActivity {
 			}
 		}
 	}
-	
 	/*-------------------------------------------------------------------------
-	 * Code for handling the item context menu
+	 * Utility functions
 	 */
-	
-	/** Called when the user clicks on a list item */
-	class InventoryItemClickListener implements OnItemClickListener {
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			// Extract item from list
-			FullItem selectedItem = (FullItem) listView.getItemAtPosition(position);
-			// Instantiate item edit dialog
-			dialog = new ItemContextDialog(InventoryActivity.this, selectedItem);
-			// Display dialog
-			dialog.show();
-		}
+	/** Add a new item to the inventory. */
+	private void addNewItem(FullItem newItem) {
+		inventoryAccess.addItem(newItem);
+		updateInventory();
 	}
-	
-	class ItemContextDialog extends Dialog {
-		private FullItem selectedItem;
-		private Button addButton;
-		private Button removeButton;
-		private Button modifyButton;
-		private Button deleteButton;
-		private Button cancelButton;
-		
-		public ItemContextDialog(Context context, FullItem selectedItem) {
-			super(context);
-			this.setContentView(R.layout.dialog_inventory_item_selected);
-			
-			this.selectedItem = new FullItem(
-					selectedItem.getName(),
-					selectedItem.getExpiration_date(),
-					selectedItem.getQuantity()
-					);
-			this.setTitle(selectedItem.getName());
-			// initialize button variables
-			addButton = (Button) this.findViewById(R.id.inventory_item_selected_add_button);
-			removeButton = (Button) this.findViewById(R.id.inventory_item_selected_remove_button);
-			modifyButton = (Button) this.findViewById(R.id.inventory_item_selected_modify_button);
-			deleteButton = (Button) this.findViewById(R.id.inventory_item_selected_delete_button);
-			cancelButton = (Button) this.findViewById(R.id.inventory_item_selected_cancel_button);
-			// Set up button listeners
-			addButton.setOnClickListener(new AddItemButtonListener());
-			removeButton.setOnClickListener(new RemoveItemButtonListener());
-			modifyButton.setOnClickListener(new ModifyItemButtonListener());
-			deleteButton.setOnClickListener(new DeleteItemButtonListener());
-			cancelButton.setOnClickListener(new CancelButtonListener());
-		}
-
-		/** Listener for the "Add" button. */
-		class AddItemButtonListener implements View.OnClickListener {
-			@Override
-			public void onClick(View view) {
-				// Create the input dialog
-				final EditText input = new EditText(InventoryActivity.this);
-				AlertDialog.Builder alert = new AlertDialog.Builder(InventoryActivity.this);
-				alert.setTitle(selectedItem.getName());
-				alert.setMessage("Add how many?");	//TODO: use string resource
-				alert.setView(input);
-				// Behavior for "Add" button
-				alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {	//TODO: use string resource
-					/** Listener for the "Add" button */
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						int quantity;
-						try {
-							quantity = Integer.parseInt(input.getText().toString());
-							if (quantity > 0) {	//FIXME: InventoryHandler should be in charge of this
-								// add item to inventory
-								selectedItem.setQuantity(quantity);
-								inventoryAccess.addItem(selectedItem);
-								// Update list view
-								updateInventory();
-								ItemContextDialog.this.dismiss();
-							} else {
-								displayError("Please input a positive number!");	//TODO: use string resource
-							}
-							
-						} catch (NumberFormatException e) {
-							displayError("Please input a positive number!");	//TODO: use string resource
-						}
-					}
-				});
-				// Behavior for "Cancel" button
-				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {	//TODO: use string resource
-					/** Listener for the "Cancel" button */
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				// Display input dialog
-				alert.show();
-			}
-		}
-		
-		/** Listener for the "Remove" button. */
-		class RemoveItemButtonListener implements View.OnClickListener {
-			@Override
-			public void onClick(View view) {
-				// Create the input dialog
-				final EditText input = new EditText(InventoryActivity.this);
-				AlertDialog.Builder alert = new AlertDialog.Builder(InventoryActivity.this);
-				alert.setTitle(selectedItem.getName());
-				alert.setMessage("Remove how many?");	//TODO: use string resource
-				alert.setView(input);
-				// Behavior for "Remove" button
-				alert.setPositiveButton("Remove", new DialogInterface.OnClickListener() {	//TODO: use string resource
-					/** Listener for the "Remove" button */
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						int quantity;
-						int numberOfItems = selectedItem.getQuantity();
-						try {
-							quantity = Integer.parseInt(input.getText().toString());
-							if (quantity > 0 && quantity <= numberOfItems) {	//FIXME: InventoryHandler should be in charge of this
-								// remove item from inventory
-								selectedItem.setQuantity(quantity);
-								inventoryAccess.removeItem(selectedItem);
-								// Update list view
-								updateInventory();
-								ItemContextDialog.this.dismiss();
-							} else if (quantity > numberOfItems) {
-								displayError("Can't remove more than " + numberOfItems + " items!");	//TODO: use string resource
-							} else {
-								displayError("Please input a positive number lower than" + numberOfItems + " !");
-							}
-							
-						} catch (NumberFormatException e) {
-							displayError("Please input a positive number lower than" + numberOfItems + " !");	//TODO: use string resource
-						}
-					}
-				});
-				// Behavior for "Cancel" button
-				alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {	//TODO: use string resource
-					/** Listener for the "Cancel" button */
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
-				// Display input dialog
-				alert.show();
-			}
-		}
-		
-		/** Listener for the "Modify" button. */
-		class ModifyItemButtonListener implements View.OnClickListener {
-			@Override
-			public void onClick(View view) {
-				// Open Edit Item dialog
-				ModifyItemDialog dialog = new ModifyItemDialog(InventoryActivity.this);
-				dialog.show();
-			}
-		}
-		
-		class ModifyItemDialog extends AddItemDialog {
-			/** Constructor */
-			public ModifyItemDialog(Context context) {
-				super(context);
-				this.setTitle(selectedItem.getName());
-				this.titleText.setText("Modify Item");	//TODO: remove this text element?
-				this.okButton.setText("Modify");	//TODO: use string resource
-				this.nameInput.setText(selectedItem.getName());
-				this.nameInput.setEnabled(false);
-				//TODO: display item's expiration date in expiration date input field
-				this.quantityInput.setText(Integer.toString(selectedItem.getQuantity()));
-			}
-			
-			/** Called by supertype's constructor */
-			@Override
-			protected void setListeners() {
-				this.okButton.setOnClickListener(new ModifyButtonListener());
-				this.cancelButton.setOnClickListener(new CancelButtonListener());
-			}
-			
-			class ModifyButtonListener implements View.OnClickListener {
-				@Override
-				public void onClick(View view) {
-					// Construct item to be added
-					selectedItem.setName(ModifyItemDialog.this.nameInput.getText().toString());
-					selectedItem.setExpiration_date(new Date());	//FIXME: find way to get a Date object from the input field.
-					selectedItem.setQuantity(Integer.parseInt(ModifyItemDialog.this.quantityInput.getText().toString()));
-					// Add item to database
-					inventoryAccess.modifyItem(selectedItem);
-					// Update list view
-					updateInventory();
-					// Close dialog
-					ModifyItemDialog.this.dismiss();
-					ItemContextDialog.this.dismiss();
-				}
-			}
-			
-			/** Cancel Button listener */
-			class CancelButtonListener implements View.OnClickListener {
-				@Override
-				public void onClick(View view) {
-					// Close dialog
-					ModifyItemDialog.this.dismiss();
-				}
-			}
-		}
-		
-		/** Listener for the "Delete" button. */
-		class DeleteItemButtonListener implements View.OnClickListener {
-			@Override
-			public void onClick(View view) {
-				// TODO open alert asking user to confirm
-				inventoryAccess.deleteItem(selectedItem);
-				// Update list view
-				updateInventory();
-				ItemContextDialog.this.dismiss();
-			}
-		}
-		
-		/** Listener for the "Cancel" button. */
-		class CancelButtonListener implements View.OnClickListener {
-			@Override
-			public void onClick(View view) {
-				ItemContextDialog.this.dismiss();
-			}
-		}
-		
-		/** Displays an alert with an error message */
-		private void displayError(String message) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(InventoryActivity.this);
-			builder.setMessage(message)
-			       .setCancelable(false)
-			       .setPositiveButton("OK", new DialogInterface.OnClickListener() {	//TODO: use string resource
-			           public void onClick(DialogInterface dialog, int id) {
-			                dialog.dismiss();
-			           }
-			       });
-			AlertDialog alert = builder.create();
-			alert.show();
-		}
+	/** Add the currently selected item to the inventory. */
+	private void addToSelectedItem(int quantity) {
+		inventoryAccess.addItem(new FullItem(selectedItem.getName(),
+				selectedItem.getExpiration_date(), quantity));
+		updateInventory();
+	}
+	/** Remove from the currently selected item in the inventory. */
+	private void removeFromSelectedItem(int quantity) {
+		inventoryAccess.removeItem(new FullItem(selectedItem.getName(),
+				selectedItem.getExpiration_date(), quantity));
+		updateInventory();
+	}
+	/** Modifies selected item in inventory. */
+	private void modifySelectedItem(FullItem editedlItem) {
+		inventoryAccess.modifyItem(selectedItem, editedlItem);
+		updateInventory();
+	}
+	/** Deletes item from inventory. */
+	private void deleteSelectedItem() {
+		inventoryAccess.deleteItem(selectedItem);
+		updateInventory();
+	}
+	/** Displays an alert with an error message. */
+	private void displayError(int messageId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(InventoryActivity.this);
+		builder.setMessage(messageId)
+		       .setCancelable(false)
+		       .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.dismiss();
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 }

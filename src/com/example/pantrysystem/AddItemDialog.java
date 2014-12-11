@@ -23,12 +23,16 @@
  *  must be defined by the extending class, which was intended from the
  *  beginning.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Removed the redundant titleText variable; added expirationDateText for
+ *  displaying the expiration date, and dateInputButton for opening the date
+ *  picker.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
-
-import com.example.pantrysystem.R;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -37,9 +41,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public abstract class AddItemDialog extends Dialog {
-	protected TextView titleText;
 	protected EditText nameInput;
-	protected EditText expirationDateInput;
+	protected TextView expirationDateText;
+	protected Button dateInputButton;
 	protected EditText quantityInput;
 	protected Button okButton;
 	protected Button cancelButton;
@@ -49,9 +53,9 @@ public abstract class AddItemDialog extends Dialog {
 		super(context);
 		this.setContentView(R.layout.dialog_inventory_add_item);
 		// Bind dialog elements to object variables.
-		this.titleText = (TextView) this.findViewById(R.id.add_item_title);
 		this.nameInput = (EditText) this.findViewById(R.id.add_item_name_input);
-		this.expirationDateInput = (EditText) this.findViewById(R.id.add_item_expiration_date_input);
+		this.expirationDateText = (TextView) this.findViewById(R.id.expiration_date_display);
+		this.dateInputButton = (Button) this.findViewById(R.id.expiration_date_input_button);
 		this.quantityInput = (EditText) this.findViewById(R.id.add_item_quantity_input);
 		this.okButton = (Button) this.findViewById(R.id.add_item_ok_button);
 		this.cancelButton = (Button) this.findViewById(R.id.add_item_cancel_button);

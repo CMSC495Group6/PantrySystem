@@ -31,17 +31,19 @@
  *  12/09/2014
  *  Added proper date functionality using DateAssistentInterface.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Updated modifyItem() method to conform to changes in interface.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 
 
 public class InventoryAccessTestImpl implements InventoryAccessInterface {
@@ -155,7 +157,7 @@ public class InventoryAccessTestImpl implements InventoryAccessInterface {
 	}
 
 	@Override
-	public void modifyItem(FullItem item) {
+	public void modifyItem(FullItem originalItem, FullItem editedItem) {
 		// TODO Auto-generated method stub
 	}
 

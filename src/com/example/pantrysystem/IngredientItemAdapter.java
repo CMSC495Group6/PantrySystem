@@ -13,6 +13,10 @@
  *  Created IngredientItemAdapter class and implemented all required
  *  functionality.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Fixed generated list rows not inheriting the parent list's attributes.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -62,7 +66,7 @@ public class IngredientItemAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.list_view_row_ingredient_item, null);
+			convertView = mInflater.inflate(R.layout.list_view_row_ingredient_item, parent, false);
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView.findViewById(R.id.ingredient_item_name);
 			holder.quantity = (TextView) convertView.findViewById(R.id.ingredient_item_quantity);

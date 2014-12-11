@@ -21,6 +21,10 @@
  *  12/07/2014
  *  Renamed to AddItemActivity.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/10/2014
+ *  Replaced some string literals with references to string resources.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -70,17 +74,17 @@ public class AddItemActivity extends ItemListActivity {
 			super(context);
 			this.item = item;
 			// Set displayed text
-			this.setTitle("Add Item");	//TODO: use string resource
-			this.titleText.setText("Add " + item.getName());
+			this.setTitle(item.getName());
 			// Set name text field to selected item's name and disable input
 			this.nameInput.setText(item.getName());
 			this.nameInput.setEnabled(false);
 			// Set okButton's text to Add
-			this.okButton.setText("Add");	//TODO: use string resource
+			this.okButton.setText(R.string.button_add);
 		}
 		
 		/** Called by supertype's constructor */
 		protected void setListeners() {
+			this.dateInputButton.setOnClickListener(null);
 			this.okButton.setOnClickListener(new AddButtonListener());
 			this.cancelButton.setOnClickListener(new CancelButtonListener());
 		}
