@@ -19,10 +19,16 @@
  *  12/07/2014
  *  The selected item and quantity are now passed to the calling activity.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Added Edit Mode functionality.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
+
+import java.util.Iterator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -38,9 +44,26 @@ import android.widget.ListView;
 public class SelectItemActivity extends ItemListActivity {
 	static final String KEY_RETURN_NAME = "Name";
 	static final String KEY_RETURN_QUANTITY = "Quantity";
+	static final String KEY_CHANGED_ITEM = "ChangedItem";
+	
+	private String changedItemName;
 	/** Called by supertype's initialization code */
 	@Override
 	protected void setUpListView() {
+		// If an ingredient is specified by name, that means we're handling a
+		// request to change a selected ingredient, so we save that ingredient's
+		// name and remove it from the list of options.
+		changedItemName = getIntent().getStringExtra(KEY_CHANGED_ITEM);
+		if (changedItemName != null) {
+			String tmpName;
+			for (Iterator<String> i = this.itemTypeNames.iterator(); i.hasNext(); ) {
+				tmpName = i.next();
+				if (tmpName.equals(changedItemName)) {
+					this.itemTypeNames.remove(tmpName);
+					break;
+				}
+			}
+		}
 		listView = (ListView) findViewById(R.id.item_select_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, itemTypeNames);
@@ -77,6 +100,7 @@ public class SelectItemActivity extends ItemListActivity {
 						Intent result = new Intent();
 						result.putExtra(KEY_RETURN_NAME, itemName);
 						result.putExtra(KEY_RETURN_QUANTITY, itemQuantity);
+						result.putExtra(KEY_CHANGED_ITEM, changedItemName);
 						setResult(Activity.RESULT_OK, result);
 						finish();
 					}

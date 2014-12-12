@@ -61,7 +61,7 @@
         android:text="@string/recipes_button_add_ingredient"
         android:onClick="addIngredient" />
     
-    <Button
+    <Button android:id="@+id/recipes_add_recipe_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"

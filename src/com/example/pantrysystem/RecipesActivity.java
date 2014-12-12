@@ -15,6 +15,10 @@
  *  Outlined the code for displaying the list of recipes; added the context
  *  menu for checking, editing, or deleting a recipe, and outlined its code.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Filled in missing function calls.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -30,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class RecipesActivity extends ActionBarActivity {
@@ -47,10 +52,8 @@ public class RecipesActivity extends ActionBarActivity {
 		//TODO: initialize recipe list view and array adapter
 		recipeList = (ListView) findViewById(R.id.recipe_list);
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-		//		android.R.layout.simple_list_item_1, recipeHandler.getRecipeNames);
+		//		android.R.layout.simple_list_item_1, recipeHandler.getRecipeNames());
 		//recipeList.setAdapter(adapter);
-		//recipeList.setOnItemClickListener(new ItemClickListener());
-		
 		// Set up the recipe context menu
 		registerForContextMenu(recipeList);
 	}
@@ -95,7 +98,7 @@ public class RecipesActivity extends ActionBarActivity {
 		String recipeName = (String) recipeList.getItemAtPosition(info.position);
 		switch (item.getItemId()) {
 		case R.id.check_recipe:
-			//FIXME recipeHandler.checkInventory(recipeName);
+			recipeHandler.checkInventory(recipeName);
 			return true;
 		case R.id.edit_recipe:
 			// Display the Recipe Editor screen with the selected recipe
@@ -107,7 +110,7 @@ public class RecipesActivity extends ActionBarActivity {
 			startActivity(intent);
 			return true;
 		case R.id.delete_recipe:
-			//FIXME recipeHandler.deleteRecipe(recipeName);
+			recipeHandler.deleteRecipe(recipeName);
 			return true;
 		default:
 			return super.onContextItemSelected(item);

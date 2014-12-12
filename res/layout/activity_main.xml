@@ -14,10 +14,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="4dp"
         android:text="@string/button_expired_items" />
     
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:text="@string/button_recipes"
