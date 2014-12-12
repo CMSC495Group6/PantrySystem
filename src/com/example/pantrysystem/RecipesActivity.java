@@ -23,6 +23,10 @@
  *  12/11/2014
  *  Uncommented the list initialization code, and added updateRecipeList().
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Fixed recipe list not updating after adding or deleting a recipe.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -75,7 +79,9 @@ public class RecipesActivity extends ActionBarActivity {
 	
 	private void updateRecipeList() {
 		recipeNames = recipeHandler.getRecipeNames();
-		adapter.notifyDataSetChanged();
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, recipeNames);
+		recipeList.setAdapter(adapter);
 	}
 
 	@Override
@@ -125,6 +131,7 @@ public class RecipesActivity extends ActionBarActivity {
 			return true;
 		case R.id.delete_recipe:
 			recipeHandler.deleteRecipe(recipeName);
+			updateRecipeList();
 			return true;
 		default:
 			return super.onContextItemSelected(item);

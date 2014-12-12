@@ -43,6 +43,11 @@
  *  Made RecipeList static so it's the same for every GUI screen, and added a
  *  hard-coded recipe for testing.
  *  @author Julian
+ *  *
+ *  12/12/2014
+ *  Added basic functionality to the finishRecipe() method.  It does not check
+ *  if the added recipe already exists.
+ *  @author Julian
  */
 package com.example.pantrysystem;
 
@@ -58,7 +63,7 @@ public class RecipeHandler {
 	// Constructor
 	public RecipeHandler() {
 		if (RecipeList == null) {
-			this.RecipeList = new ArrayList<Recipe>();
+			RecipeList = new ArrayList<Recipe>();
 			//TODO: remove this once the database works
 			Recipe r = new Recipe();
 			r.setName("Just some apples");
@@ -69,17 +74,17 @@ public class RecipeHandler {
 	
 	public RecipeHandler(Recipe r) {
 		if (RecipeList == null) {
-			this.RecipeList = new ArrayList<Recipe>();
+			RecipeList = new ArrayList<Recipe>();
 		}
-		this.RecipeList.add(r);
+		RecipeList.add(r);
 	}
 	
 	private int getListSize() {
-		return this.RecipeList.size();
+		return RecipeList.size();
 	}
 	
 	public ArrayList<Recipe> getRecipeList() {
-		return this.RecipeList;
+		return RecipeList;
 	}
 	
 	private Recipe getCurrentRecipe() {
@@ -117,7 +122,7 @@ public class RecipeHandler {
 		
 		// search the list for recipe of specified name
 		for (int i = 0; i < size; i++)
-			if (this.RecipeList.get(i).getName().equalsIgnoreCase(s))
+			if (RecipeList.get(i).getName().equalsIgnoreCase(s))
 				return i;
 		
 		return -1;
@@ -129,8 +134,8 @@ public class RecipeHandler {
 		
 		// search the list for recipe of specified name
 		for (int i = 0; i < size; i++)
-			if (this.RecipeList.get(i).getName().equalsIgnoreCase(s))
-				return this.RecipeList.get(i);
+			if (RecipeList.get(i).getName().equalsIgnoreCase(s))
+				return RecipeList.get(i);
 		
 		// recipe not found in list
 		return null;
@@ -185,7 +190,7 @@ public class RecipeHandler {
 	 */
 	public boolean finishRecipe() {
 		//TODO save recipe to database
-		
+		RecipeList.add(currentRecipe);
 		return true;
 	}
 	
@@ -283,7 +288,7 @@ public class RecipeHandler {
 		
 		// check if specified recipe was found
 		if (index >= 0)
-			this.RecipeList.set(index, tempRecipe);
+			RecipeList.set(index, tempRecipe);
 	}
 	
 	/* version 2 of the modify function, assumes that the currentRecipe
@@ -313,7 +318,7 @@ public class RecipeHandler {
 		
 		// check if specified recipe was found
 		if (index >= 0)
-			this.RecipeList.set(index, tempRecipe);
+			RecipeList.set(index, tempRecipe);
 	}
 	
 	/* Menu selection for removing a recipe by name
@@ -324,7 +329,7 @@ public class RecipeHandler {
 		
 		// check if specified recipe was found
 		if (target >= 0)
-			this.RecipeList.remove(target);
+			RecipeList.remove(target);
 	}
 	
 	/* version 2 of the delete recipe function
@@ -336,7 +341,7 @@ public class RecipeHandler {
 		
 		// check if specified recipe was found
 		if (target >= 0)
-			this.RecipeList.remove(target);
+			RecipeList.remove(target);
 	}
 	
 	/* Menu selection for checking if inventory has ingredients

@@ -35,6 +35,11 @@
  *  12/11/2014
  *  Uncommented code using previously unimplemented RecipeHandler functions.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Fixed the Update Quantity function not updating the quantity displayed in
+ *  the list.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -228,6 +233,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 				try {
 					quantity = Integer.parseInt(input.getText().toString());
 					recipeHandler.changeIngredientQuantity(selectedIngredient.getName(), quantity);
+					refreshIngredientsList();
 					dialog.dismiss();
 				} catch (NumberFormatException e) {
 					displayError(R.string.error_positive_number);

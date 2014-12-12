@@ -35,6 +35,10 @@
  *  12/10/2014
  *  Updated modifyItem() method to conform to changes in interface.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Fixed misspelling of banana.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -49,7 +53,7 @@ import java.util.Iterator;
 public class InventoryAccessTestImpl implements InventoryAccessInterface {
 	private static final String[] INIT_DATA = {
 		"Apple","Dec-11-2014","6",
-		"Bannanna", "Dec-29-2014", "0",
+		"Banana", "Dec-29-2014", "0",
 		"Coconut", "Jan-04-2015", "1",
 		"Doritos", "Apr-12-2020", "2",
 		"Espresso", "Feb-28-2005", "10"
