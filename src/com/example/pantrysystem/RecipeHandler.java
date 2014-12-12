@@ -34,6 +34,10 @@
  *  Replaced references to Item class with FullItem class.
  *  @author Julian
  *  *
+ *  12/11/2014
+ *  Added various functions needed for the GUI to use. Also modified
+ *  function spelling to be consistent with practices.
+ *  @author Jesse
  */
 package com.example.pantrysystem;
 
@@ -55,16 +59,41 @@ public class RecipeHandler {
 		this.RecipeList.add(r);
 	}
 	
-	private int GetListSize() {
+	private int getListSize() {
 		return this.RecipeList.size();
 	}
 	
-	private Recipe GetCurrentRecipe() {
+	public ArrayList<Recipe> getRecipeList() {
+		return this.RecipeList;
+	}
+	
+	private Recipe getCurrentRecipe() {
 		return this.currentRecipe;
 	}
 	
-	private int GetRecipeIndex(String s) {
-		int size = this.GetListSize();
+	public ArrayList<String> getRecipeNames() {
+		ArrayList<String> recipeNames = new ArrayList<String>();
+		int size = this.getListSize();
+		
+		// loop through recipes and compile a list of their names
+		for (int i = 0; i < size; i++)
+			recipeNames.add(this.getRecipeList().get(i).getName());
+		
+		return recipeNames;
+	}
+	
+	// returns current recipe name
+	public String getRecipeName() {
+		return this.getCurrentRecipe().getName();
+	}
+	
+	// returns current recipe ingredients
+	public ArrayList<IngredientItem> getRecipeIngredients() {
+		return this.getCurrentRecipe().getList();
+	}
+	
+	private int getRecipeIndex(String s) {
+		int size = this.getListSize();
 		
 		// search the list for recipe of specified name
 		for (int i = 0; i < size; i++)
@@ -75,8 +104,8 @@ public class RecipeHandler {
 	}
 	
 	// Find a recipe by name from the list of recipes, return null if DNE
-	public Recipe GetRecipe(String s) {
-		int size = this.GetListSize();
+	public Recipe getRecipe(String s) {
+		int size = this.getListSize();
 		
 		// search the list for recipe of specified name
 		for (int i = 0; i < size; i++)
@@ -89,6 +118,10 @@ public class RecipeHandler {
 	
 	public void setCurrentRecipe(Recipe r) {
 		this.currentRecipe = new Recipe(r);
+	}
+	
+	public void setRecipeName(String name) {
+		this.getCurrentRecipe().setName(name);
 	}
 	
 	/* Menu selection for adding a new recipe to the system
@@ -108,7 +141,7 @@ public class RecipeHandler {
 	 */
 	 public void fillRecipe(ArrayList<IngredientItem> items) {
 		// set the supplied ingredients as the ingredients for the recipe
-		this.GetCurrentRecipe().setIngredients(items);
+		this.getCurrentRecipe().setIngredients(items);
 	}
 	
 	/* alternative part 2 to adding a new recipe
@@ -116,14 +149,14 @@ public class RecipeHandler {
 	 */
 	public void addItem(IngredientItem item) {
 		// set the supplied ingredients as the ingredients for the recipe
-		this.GetCurrentRecipe().addIngredient(item);	
+		this.getCurrentRecipe().addIngredient(item);	
 	}
 	
 	/* set the recipeName of the currentRecipe
 	 * part 3 to adding a new recipe
 	 */
 	public void addName(String name) {
-		this.GetCurrentRecipe().setName(name);
+		this.getCurrentRecipe().setName(name);
 	}
 	
 	/* Called at the end of creating or editing a recipe
@@ -136,13 +169,79 @@ public class RecipeHandler {
 		return true;
 	}
 	
+	/* loads a recipe, by name, into the currentRecipe variabe
+	 * to be used for editing purposes
+	 */
+	public void editRecipe(String name) {
+		this.setCurrentRecipe(this.getRecipe(name));
+	}
+	
+	/* removes an ingredient from the current recipe
+	 * by ingredient name
+	 */
+	public void removeIngredient(String name) {
+		// create a temporary list to edit from the currentRecipe
+		ArrayList<IngredientItem> tempList = this.getCurrentRecipe().getList();
+		int size = tempList.size();
+		
+		// loop through the list to find occurences of ingredients with name
+		for (int i = 0; i < size; i++) {
+			// remove them from the list if found
+			if (tempList.get(i).getName().equalsIgnoreCase(name))
+				tempList.remove(i);
+		}
+		
+		// set the modifed list as a new list of ingredients
+		this.currentRecipe.setIngredients(tempList);
+	}
+	
+	/* modifies an ingredient within the current recipe by name
+	 * does not change ingredient quantity
+	 */
+	public void changeIngredient(String oldName, String newName) {
+		// create a temporary list to edit from the currentRecipe
+		ArrayList<IngredientItem> tempList = this.getCurrentRecipe().getList();
+		int size = tempList.size();
+
+		
+		// loop through the list to find occurences of ingredients with name
+		for (int i = 0; i < size; i++) {
+			// change the ingredient from the list if found
+			if (tempList.get(i).getName().equalsIgnoreCase(oldName))
+				tempList.get(i).setName(newName);
+		}
+		
+		// set the modifed list as a new list of ingredients
+		this.currentRecipe.setIngredients(tempList);
+	}
+	
+	/* modifies an ingredient within the current recipe by name
+	 * does not change ingredient name
+	 */
+	public void changeIngredientQuantity(String name, int newQuantity) {
+		// create a temporary list to edit from the currentRecipe
+		ArrayList<IngredientItem> tempList = this.getCurrentRecipe().getList();
+		int size = tempList.size();
+
+		
+		// loop through the list to find occurences of ingredients with name
+		for (int i = 0; i < size; i++) {
+			// change the ingredient from the list if found
+			if (tempList.get(i).getName().equalsIgnoreCase(name))
+				tempList.get(i).setQuantity(newQuantity);
+		}
+		
+		// set the modifed list as a new list of ingredients
+		this.currentRecipe.setIngredients(tempList);
+	}
+	
 	/* Menu selection for modifying a recipe by name
 	 * Function is called specifying the recipe name, the type of
 	 * Modification requested, and the item being modified.
 	 */
 	public void modifyRecipe(String name, int type, IngredientItem item) {
 		// create a temporary version of the modified recipe
-		Recipe tempRecipe = new Recipe(this.GetRecipe(name));
+		Recipe tempRecipe = new Recipe(this.getRecipe(name));
 
 		switch(type) {
 			case 1: 
@@ -160,7 +259,7 @@ public class RecipeHandler {
 		}
 		
 		// find and replace the list item
-		int index = this.GetRecipeIndex(tempRecipe.getName());
+		int index = this.getRecipeIndex(tempRecipe.getName());
 		
 		// check if specified recipe was found
 		if (index >= 0)
@@ -172,7 +271,7 @@ public class RecipeHandler {
 	 */
 	public void modifyRecipe(int type, IngredientItem item) {
 		// create a temporary version of the modified recipe
-		Recipe tempRecipe = new Recipe(this.GetCurrentRecipe());
+		Recipe tempRecipe = new Recipe(this.getCurrentRecipe());
 
 		switch(type) {
 			case 1: 
@@ -190,7 +289,7 @@ public class RecipeHandler {
 		}
 		
 		// find and replace the list item
-		int index = this.GetRecipeIndex(tempRecipe.getName());
+		int index = this.getRecipeIndex(tempRecipe.getName());
 		
 		// check if specified recipe was found
 		if (index >= 0)
@@ -201,7 +300,7 @@ public class RecipeHandler {
 	 * 
 	 */
 	public void deleteRecipe(String name) {
-		int target = this.GetRecipeIndex(name);
+		int target = this.getRecipeIndex(name);
 		
 		// check if specified recipe was found
 		if (target >= 0)
@@ -213,7 +312,7 @@ public class RecipeHandler {
 	 * delete
 	 */
 	public void deleteRecipe() {
-		int target = this.GetRecipeIndex(this.GetCurrentRecipe().getName());
+		int target = this.getRecipeIndex(this.getCurrentRecipe().getName());
 		
 		// check if specified recipe was found
 		if (target >= 0)
@@ -225,7 +324,7 @@ public class RecipeHandler {
 	 * as a multidimensional arraylist (instock, missing, expired).
 	 */
 	public ArrayList<ArrayList<IngredientItem>> checkInventory(String name) {
-		ArrayList<IngredientItem> tempList = new ArrayList<IngredientItem>(this.GetRecipe(name).getList());
+		ArrayList<IngredientItem> tempList = new ArrayList<IngredientItem>(this.getRecipe(name).getList());
 		ArrayList<IngredientItem> missingItems = new ArrayList<IngredientItem>();
 		ArrayList<IngredientItem> expiredItems = new ArrayList<IngredientItem>();
 		ArrayList<IngredientItem> inStockItems = new ArrayList<IngredientItem>();
@@ -263,7 +362,7 @@ public class RecipeHandler {
 	 */
 	public ArrayList<ArrayList<IngredientItem>> checkInventory() {
 		ArrayList<IngredientItem> tempList = 
-			new ArrayList<IngredientItem>(this.GetCurrentRecipe().getList());
+			new ArrayList<IngredientItem>(this.getCurrentRecipe().getList());
 		ArrayList<IngredientItem> missingItems = new ArrayList<IngredientItem>();
 		ArrayList<IngredientItem> expiredItems = new ArrayList<IngredientItem>();
 		ArrayList<IngredientItem> inStockItems = new ArrayList<IngredientItem>();
