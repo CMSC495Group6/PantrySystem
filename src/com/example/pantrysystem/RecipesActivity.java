@@ -19,10 +19,16 @@
  *  12/11/2014
  *  Filled in missing function calls.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Uncommented the list initialization code, and added updateRecipeList().
+ *  -Julian
  *  ***************************************************************************
  *  
  */
 package com.example.pantrysystem;
+
+import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +46,8 @@ import android.widget.ListView;
 public class RecipesActivity extends ActionBarActivity {
 	ListView recipeList;
 	RecipeHandler recipeHandler;
+	ArrayList<String> recipeNames;
+	ArrayAdapter<String> adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +59,10 @@ public class RecipesActivity extends ActionBarActivity {
 		
 		//TODO: initialize recipe list view and array adapter
 		recipeList = (ListView) findViewById(R.id.recipe_list);
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-		//		android.R.layout.simple_list_item_1, recipeHandler.getRecipeNames());
-		//recipeList.setAdapter(adapter);
+		recipeNames = recipeHandler.getRecipeNames();
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, recipeNames);
+		recipeList.setAdapter(adapter);
 		// Set up the recipe context menu
 		registerForContextMenu(recipeList);
 	}
@@ -61,7 +70,12 @@ public class RecipesActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//TODO: Update recipe list view
+		updateRecipeList();
+	}
+	
+	private void updateRecipeList() {
+		recipeNames = recipeHandler.getRecipeNames();
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override

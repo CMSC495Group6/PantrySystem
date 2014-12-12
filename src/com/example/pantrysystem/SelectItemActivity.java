@@ -23,6 +23,12 @@
  *  12/11/2014
  *  Added Edit Mode functionality.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Commented out the code that removes the selected item in Edit Mode, because
+ *  it broke the list indexes, and skipped displaying the quantity input dialog
+ *  in Edit Mode.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -54,16 +60,17 @@ public class SelectItemActivity extends ItemListActivity {
 		// request to change a selected ingredient, so we save that ingredient's
 		// name and remove it from the list of options.
 		changedItemName = getIntent().getStringExtra(KEY_CHANGED_ITEM);
-		if (changedItemName != null) {
-			String tmpName;
-			for (Iterator<String> i = this.itemTypeNames.iterator(); i.hasNext(); ) {
-				tmpName = i.next();
-				if (tmpName.equals(changedItemName)) {
-					this.itemTypeNames.remove(tmpName);
-					break;
-				}
-			}
-		}
+// Commented out, because it breaks list indexes
+//		if (changedItemName != null) {
+//			String tmpName;
+//			for (Iterator<String> i = this.itemTypeNames.iterator(); i.hasNext(); ) {
+//				tmpName = i.next();
+//				if (tmpName.equals(changedItemName)) {
+//					this.itemTypeNames.remove(tmpName);
+//					break;
+//				}
+//			}
+//		}
 		listView = (ListView) findViewById(R.id.item_select_list);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, itemTypeNames);
@@ -80,41 +87,56 @@ public class SelectItemActivity extends ItemListActivity {
 			// Retrieve item from item list in the same position as in the name list
 			BasicItem selectedItem = itemTypes.get(position);
 			itemName = selectedItem.getName();
-			final EditText input = new EditText(SelectItemActivity.this);
-			AlertDialog.Builder alert = new AlertDialog.Builder(SelectItemActivity.this);
-			alert.setTitle(selectedItem.getName());
-			alert.setMessage("Add how many?");	//TODO: use string resource
-			alert.setView(input);
-			// Behavior for "Add" button
-			alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {	//TODO: use string resource
-				/** Listener for the "Add" button */
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					try {
-						itemQuantity = Integer.parseInt(input.getText().toString());
-					} catch (NumberFormatException e) {
-						displayError("Please input a positive number!");	//TODO: use string resource
-					} finally {
-						dialog.dismiss();
-						// Return selected item and quantity to calling activity
-						Intent result = new Intent();
-						result.putExtra(KEY_RETURN_NAME, itemName);
-						result.putExtra(KEY_RETURN_QUANTITY, itemQuantity);
-						result.putExtra(KEY_CHANGED_ITEM, changedItemName);
-						setResult(Activity.RESULT_OK, result);
-						finish();
-					}
-				}
-			});
-			// Behavior for "Cancel" button
-			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {	//TODO: use string resource
-				/** Listener for the "Cancel" button */
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.dismiss();
-				}
-			});
-			alert.show();
+			
+			if (changedItemName == null) {
+				final EditText input = new EditText(SelectItemActivity.this);
+				AlertDialog.Builder alert = new AlertDialog.Builder(
+						SelectItemActivity.this);
+				alert.setTitle(selectedItem.getName());
+				alert.setMessage("Add how many?"); //TODO: use string resource
+				alert.setView(input);
+				// Behavior for "Add" button
+				alert.setPositiveButton("Add",
+						new DialogInterface.OnClickListener() { //TODO: use string resource
+							/** Listener for the "Add" button */
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								try {
+									itemQuantity = Integer.parseInt(input
+											.getText().toString());
+								} catch (NumberFormatException e) {
+									displayError("Please input a positive number!"); //TODO: use string resource
+								} finally {
+									dialog.dismiss();
+									// Return selected item and quantity to calling activity
+									Intent result = new Intent();
+									result.putExtra(KEY_RETURN_NAME, itemName);
+									result.putExtra(KEY_RETURN_QUANTITY, itemQuantity);
+									setResult(Activity.RESULT_OK, result);
+									finish();
+								}
+							}
+						});
+				// Behavior for "Cancel" button
+				alert.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() { //TODO: use string resource
+							/** Listener for the "Cancel" button */
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+				alert.show();
+			} else {
+				// Return original item and selected item to calling activity
+				Intent result = new Intent();
+				result.putExtra(KEY_RETURN_NAME, itemName);
+				result.putExtra(KEY_CHANGED_ITEM, changedItemName);
+				setResult(Activity.RESULT_OK, result);
+				finish();
+			}
 		}
 		
 		/** Displays an alert with an error message */

@@ -31,6 +31,10 @@
  *  Added context menu to list of ingredients, and refined outlined code some
  *  more.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/11/2014
+ *  Uncommented code using previously unimplemented RecipeHandler functions.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -72,7 +76,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 		this.nameInput = (EditText) findViewById(R.id.add_recipe_name_input);
 		this.ingredientList = (ListView) findViewById(R.id.ingredients_list);
 		
-		//TODO: If a recipe name was passed to the activity, load that recipe and
+		// If a recipe name was passed to the activity, load that recipe and
 		// display it.  Otherwise, display an empty editor for creating a new
 		// recipe.
 		String recipeName = getIntent().getStringExtra(KEY_DISPLAY_RECIPE);
@@ -80,17 +84,17 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 			// Set up recipeHandler to create a new recipe
 			recipeHandler.createNewRecipe();
 		} else {
-			//TODO: set up recipeHandler to edit an existing recipe
-			//recipeHandler.editRecipe(recipeName);
-			//TODO: get recipe's name and display it in the name input field
-			//this.nameInput.setText(this.recipeHandler.getRecipeName());
+			// Set up recipeHandler to edit an existing recipe
+			recipeHandler.editRecipe(recipeName);
+			// Get recipe's name and display it in the name input field
+			this.nameInput.setText(this.recipeHandler.getRecipeName());
 			// Change Add Recipe button's text to Update Recipe
 			Button addRecipeButton;
 			addRecipeButton = (Button) findViewById(R.id.recipes_add_recipe_button);
 			addRecipeButton.setText("Update Recipe");	//TODO: use string resource
 		}
-		//TODO: set up list view to display ingredients in recipe
-		//adapter = new IngredientItemAdapter(this, recipeHandler.getRecipeIngredients());
+		// Set up list view to display ingredients in recipe
+		adapter = new IngredientItemAdapter(this, recipeHandler.getRecipeIngredients());
 		ingredientList.setAdapter(adapter);
 		// Set up the recipe context menu
 		registerForContextMenu(ingredientList);
@@ -143,7 +147,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 			return true;
 		case R.id.remove_ingredient:
 			//TODO: Ask for confirmation
-			//recipeHandler.removeIngredient(ingredient.getName());
+			recipeHandler.removeIngredient(selectedIngredient.getName());
 			{	// Testing
 				recipeHandler.modifyRecipe(3, selectedIngredient);
 			}
@@ -174,7 +178,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 				String newIngredientname;
 				oldIngredientName = data.getStringExtra(SelectItemActivity.KEY_CHANGED_ITEM);
 				newIngredientname = data.getStringExtra(SelectItemActivity.KEY_RETURN_NAME);
-				//recipeHandler.changeIngredient(oldIngredientName, newIngredientname);
+				recipeHandler.changeIngredient(oldIngredientName, newIngredientname);
 				refreshIngredientsList();
 			}
 		}
@@ -188,7 +192,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 	}
 	
 	private void refreshIngredientsList() {
-		//adapter.updateItems(recipeHandler.getRecipeIngredients());
+		adapter.updateItems(recipeHandler.getRecipeIngredients());
 	}
 	/** Called when the user clicks the Add Ingredient button */
 	public void addIngredient(View view) {
@@ -202,8 +206,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 	}
 	/** Called when the user clicks the Add Recipe button */
 	public void addRecipe(View view) {
-		//TODO: Send recipe name to recipe system
-		//recipeHandler.setRecipeName(this.nameInput.getText().toString());
+		recipeHandler.setRecipeName(this.nameInput.getText().toString());
 		recipeHandler.finishRecipe();
 		finish();
 	}
@@ -224,7 +227,7 @@ public class RecipesAddNewRecipeActivity extends ActionBarActivity {
 				int quantity;
 				try {
 					quantity = Integer.parseInt(input.getText().toString());
-					//recipeHandler.changeIngredientQuantity(selectedIngredient.getName(), quantity);
+					recipeHandler.changeIngredientQuantity(selectedIngredient.getName(), quantity);
 					dialog.dismiss();
 				} catch (NumberFormatException e) {
 					displayError(R.string.error_positive_number);

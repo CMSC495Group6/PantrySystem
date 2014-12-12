@@ -38,24 +38,39 @@
  *  Added various functions needed for the GUI to use. Also modified
  *  function spelling to be consistent with practices.
  *  @author Jesse
+ *  *
+ *  12/11/2014
+ *  Made RecipeList static so it's the same for every GUI screen, and added a
+ *  hard-coded recipe for testing.
+ *  @author Julian
  */
 package com.example.pantrysystem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RecipeHandler {
 	// List of all recipes in application
-	private ArrayList<Recipe> RecipeList;
+	private static ArrayList<Recipe> RecipeList;
 	private Recipe currentRecipe;
 	private final int IN_STOCK = 1, OUT_OF_STOCK = 0, EXPIRED = -1;
 	
 	// Constructor
 	public RecipeHandler() {
-		this.RecipeList = new ArrayList<Recipe>();
+		if (RecipeList == null) {
+			this.RecipeList = new ArrayList<Recipe>();
+			//TODO: remove this once the database works
+			Recipe r = new Recipe();
+			r.setName("Just some apples");
+			r.addIngredient(new IngredientItem("Apple",3));
+			RecipeList.add(r);
+		}
 	}
 	
 	public RecipeHandler(Recipe r) {
-		this.RecipeList = new ArrayList<Recipe>();
+		if (RecipeList == null) {
+			this.RecipeList = new ArrayList<Recipe>();
+		}
 		this.RecipeList.add(r);
 	}
 	
@@ -73,11 +88,16 @@ public class RecipeHandler {
 	
 	public ArrayList<String> getRecipeNames() {
 		ArrayList<String> recipeNames = new ArrayList<String>();
-		int size = this.getListSize();
-		
-		// loop through recipes and compile a list of their names
-		for (int i = 0; i < size; i++)
-			recipeNames.add(this.getRecipeList().get(i).getName());
+//		int size = this.getListSize();
+//		
+//		// loop through recipes and compile a list of their names
+//		for (int i = 0; i < size; i++)
+//			recipeNames.add(this.getRecipeList().get(i).getName());
+		Recipe tmpRecipe;
+		for (Iterator<Recipe> i = RecipeList.iterator(); i.hasNext(); ) {
+			tmpRecipe = i.next();
+			recipeNames.add(tmpRecipe.getName());
+		}
 		
 		return recipeNames;
 	}
