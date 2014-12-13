@@ -10,6 +10,11 @@
  *  12/07/2014
  *  Created IngredientItem class and implemented all required functionality.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Added comparison function that returns true if the two items have the same
+ *  name and quantity.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -36,4 +41,8 @@ public class IngredientItem extends BasicItem implements QuantifiedItem {
 	/** Setters */
 	@Override
 	public void setQuantity(int quantity) {this.quantity = quantity;}
+	/** Comparison function */
+	public boolean equals(IngredientItem item) {
+		return this.name.equals(item.getName());
+	}
 }

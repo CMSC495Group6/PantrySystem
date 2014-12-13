@@ -10,6 +10,11 @@
  *  12/07/2014
  *  Created BasicItem class and implemented all required functionality.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Added comparison function that returns true if the two items have the same
+ *  name.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -26,4 +31,8 @@ public class BasicItem {
 	public String getName() {return this.name;}
 	/** Setters */
 	public void setName(String name) {this.name = name;}
+	/** Comparison function */
+	public boolean equals(BasicItem item) {
+		return this.name.equals(item.getName());
+	}
 }

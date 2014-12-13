@@ -39,6 +39,10 @@
  *  12/12/2014
  *  Fixed misspelling of banana.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Added findItem() function and fixed the data-management functions.
+ *  -Julian
  *  ***************************************************************************
  *  
  */
@@ -112,7 +116,7 @@ public class InventoryAccessTestImpl implements InventoryAccessInterface {
 		// Assemble list of all items with quantity > 0
 		for (Iterator<FullItem> i = inventory.iterator(); i.hasNext(); ) {
 			tmpItem = i.next();
-			if (tmpItem.getQuantity() != 0) stocked.add(tmpItem);
+			if (tmpItem.getQuantity() > 0) stocked.add(tmpItem);
 		}
 		
 		return stocked;
@@ -147,28 +151,65 @@ public class InventoryAccessTestImpl implements InventoryAccessInterface {
 
 	@Override
 	public void addItem(FullItem item) {
-		inventory.add(item);
+		int quantity;
+		int index = findItem(item);
+		if (index >= 0) {
+			quantity = inventory.get(index).getQuantity() + item.getQuantity();
+			inventory.get(index).setQuantity(quantity);
+			return;
+		} else {
+			// Add new item to inventory if not match was found
+			inventory.add(item);
+		}
 	}
 
 	@Override
 	public void removeItem(FullItem item) {
-		FullItem tmpItem;
-		int i;
-		i = inventory.indexOf(item);
-		tmpItem = inventory.get(i);
-		tmpItem.setQuantity(tmpItem.getQuantity() - item.getQuantity());
-		inventory.set(i, tmpItem);
+		int quantity;
+		int index = findItem(item);
+		if (index >= 0) {
+			quantity = inventory.get(index).getQuantity() - item.getQuantity();
+			//TODO: throw exception if result is negative
+			inventory.get(index).setQuantity(quantity);
+			return;
+		} else {
+			//TODO: throw exception if item wasn't found
+		}
 	}
 
 	@Override
 	public void modifyItem(FullItem originalItem, FullItem editedItem) {
-		// TODO Auto-generated method stub
+		int index = findItem(originalItem);
+		if (index >= 0) {
+			inventory.set(index, editedItem);
+			return;
+		} else {
+			//TODO: throw exception if item wasn't found
+		}
 	}
 
 	@Override
-	public void deleteItem(BasicItem item) {
-		// TODO Auto-generated method stub
+	public void deleteItem(FullItem item) {
+		int index = findItem(item);
+		if (index >= 0) {
+			inventory.remove(index);
+			return;
+		} else {
+			//TODO: throw exception if item wasn't found
+		}
 
+	}
+	/** Searches the inventory for an item identical to the one provided and
+	 * returns its index, -1 if no such item exists. */
+	private int findItem(FullItem item) {
+		FullItem tmpItem;
+		for (Iterator<FullItem> i = inventory.iterator(); i.hasNext(); ) {
+			tmpItem = i.next();
+			if (tmpItem.equals(item)) {
+				return inventory.indexOf(tmpItem);
+			}
+		}
+		return -1;
 	}
 
 }

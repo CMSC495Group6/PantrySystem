@@ -16,6 +16,13 @@
  *  Renamed Item to FullItem and made it extend BasicItem and implement
  *  DatedItem, and QuantifiedItem.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Added comparison function that returns true if the two items have the same
+ *  name and expiration date.  The quantity is ignored in the comparison.  This
+ *  should be changed later, and a new item type that consists only of name and
+ *  expiration date should be used for the current comparison.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -51,5 +58,8 @@ public class FullItem extends BasicItem implements DatedItem, QuantifiedItem {
 	public void setExpiration_date(Date expiration_date) {this.expiration_date = expiration_date;}
 	@Override
 	public void setQuantity(int quantity) {this.quantity = quantity;}
-	
+	/** Comparison function */
+	public boolean equals(FullItem item) {
+		return this.name.equals(item.getName()) && this.expiration_date.equals(item.getExpiration_date());
+	}
 }

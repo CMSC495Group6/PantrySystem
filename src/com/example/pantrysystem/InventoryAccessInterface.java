@@ -23,6 +23,12 @@
  *  12/10/2014
  *  Changed the modifyItem() method to also require the original item as input.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Changed the deleteItem() function to accept a full item.  The function is
+ *  now meant for deleting specific list items.  To delete all items of a type,
+ *  a new function deleteItemsOfType() should be added.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -52,7 +58,7 @@ public interface InventoryAccessInterface {
 	/** Modify an item's information. */
 	//TODO: throw exception when supplied item is not present in inventory?
 	public void modifyItem(FullItem originalItem, FullItem editedItem);
-	/** Delete item from inventory. */
+	/** Delete specified item from inventory. */
 	//TODO: throw exception when items of this type with a quantity > 0 are in the inventory?
-	public void deleteItem(BasicItem item);
+	public void deleteItem(FullItem item);
 }
