@@ -1877,6 +1877,7 @@ containing a value of this type.
         public static final int button_recipes=0x7f0a0018;
         public static final int button_remove=0x7f0a001c;
         public static final int button_remove_ingredient=0x7f0a0023;
+        public static final int default_item_quantity=0x7f0a0039;
         public static final int error_date_format=0x7f0a0028;
         public static final int error_positive_number=0x7f0a0027;
         public static final int inventory_button_add_item=0x7f0a0029;

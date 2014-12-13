@@ -506,6 +506,7 @@ int string button_ok 0x7f0a0025
 int string button_recipes 0x7f0a0018
 int string button_remove 0x7f0a001c
 int string button_remove_ingredient 0x7f0a0023
+int string default_item_quantity 0x7f0a0039
 int string error_date_format 0x7f0a0028
 int string error_positive_number 0x7f0a0027
 int string inventory_button_add_item 0x7f0a0029

@@ -32,6 +32,11 @@
  *  12/11/2014
  *  Added Date Picker functionality to the Add New Item and Edit Item dialogs.
  *  - Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Made all quantity inputs except for the one on the Edit Item dialog default
+ *  to 1.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -157,6 +162,7 @@ public class InventoryActivity extends ActionBarActivity {
 	private void showAddItemDialog(String title) {
 		// Create the input dialog
 		final EditText input = new EditText(InventoryActivity.this);
+		input.setText(R.string.default_item_quantity);
 		AlertDialog.Builder alert = new AlertDialog.Builder(InventoryActivity.this);
 		alert.setTitle(title);
 		alert.setMessage("Add how many?");	//TODO: use string resource
@@ -184,6 +190,7 @@ public class InventoryActivity extends ActionBarActivity {
 	private void showRemoveItemDialog(String title) {
 		// Create the input dialog
 		final EditText input = new EditText(InventoryActivity.this);
+		input.setText(R.string.default_item_quantity);
 		AlertDialog.Builder alert = new AlertDialog.Builder(InventoryActivity.this);
 		alert.setTitle(title);
 		alert.setMessage("Remove how many?");	//TODO: use string resource
@@ -223,7 +230,7 @@ public class InventoryActivity extends ActionBarActivity {
 			this.setTitle(selectedItem.getName());
 			this.okButton.setText(R.string.button_edit);
 			this.nameInput.setText(selectedItem.getName());
-			this.nameInput.setEnabled(false);
+			//this.nameInput.setEnabled(false);
 			this.expirationDateText.setText(
 					dateAssistent.formatDate(
 							selectedItem.getExpiration_date()));
@@ -314,6 +321,7 @@ public class InventoryActivity extends ActionBarActivity {
 			// Set dynamic text
 			this.setTitle(R.string.inventory_button_add_new_item);
 			this.okButton.setText(R.string.button_add);
+			this.quantityInput.setText(R.string.default_item_quantity);
 		}
 		/** Called by supertype's constructor */
 		@Override

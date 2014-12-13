@@ -29,6 +29,10 @@
  *  it broke the list indexes, and skipped displaying the quantity input dialog
  *  in Edit Mode.
  *  -Julian
+ *  ---------------------------------------------------------------------------
+ *  12/12/2014
+ *  Made quantity input after selecting an item default to 1.
+ *  - Julian
  *  ***************************************************************************
  *  
  */
@@ -90,6 +94,7 @@ public class SelectItemActivity extends ItemListActivity {
 			
 			if (changedItemName == null) {
 				final EditText input = new EditText(SelectItemActivity.this);
+				input.setText(R.string.default_item_quantity);
 				AlertDialog.Builder alert = new AlertDialog.Builder(
 						SelectItemActivity.this);
 				alert.setTitle(selectedItem.getName());

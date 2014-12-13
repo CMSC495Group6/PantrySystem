@@ -27,6 +27,7 @@
     <string name="recipes_inventory">Inventory</string>
     <string name="recipes_button_add_recipe">Add Recipe</string>
     <string name="recipes_button_add_ingredient">Add Ingredient</string>
+    <string name="default_item_quantity">1</string>
     
     
     
